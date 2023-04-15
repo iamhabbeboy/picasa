@@ -54,10 +54,6 @@ func init() {
 
 	log.SetLevel(log.InfoLevel)
 	log.SetFormatter(&log.TextFormatter{FullTimestamp: true})
-
-	if hasImage() {
-		_ = os.Mkdir(IMAGE_DIR, 0755)
-	}
 }
 
 func processImage() {
@@ -104,14 +100,6 @@ func downloadImage(image string, index int, wg *sync.WaitGroup) {
 		log.Fatal(err)
 	}
 	fmt.Println("Downloaded to: ", f.Name())
-}
-
-func hasImage() bool {
-	_, err := os.Stat(IMAGE_DIR + "/0.jpg")
-	if err != nil {
-		log.Fatal(err)
-	}
-	return os.IsNotExist(err)
 }
 
 func cronTab(interval string) {

@@ -16,9 +16,7 @@ var rootCmd = &cobra.Command{
 	Long:  `A cli tool to set random wallpaper.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
-	// rootCmd.AddCommand(downloadCmd)
-	// rootCmd.AddCommand(setCmd)
+	// Run: func(cmd *cobra.Command, args []string) {
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
