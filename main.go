@@ -8,14 +8,16 @@ import (
 	"os"
 )
 
+const IMAGE_DIR = "images"
+
 func main() {
 	go createImageDir()
 	cmd.Execute()
 }
 
 func createImageDir() bool {
-	if _, err := os.Stat("IMAGE_DIR"); os.IsNotExist(err) {
-		err := os.MkdirAll("IMAGE_DIR", 0755)
+	if _, err := os.Stat(IMAGE_DIR); os.IsNotExist(err) {
+		err := os.MkdirAll(IMAGE_DIR, 0755)
 		return err == nil
 	}
 	return true

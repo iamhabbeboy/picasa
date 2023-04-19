@@ -9,8 +9,6 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"os/exec"
-	"strings"
 	"sync"
 
 	log "github.com/sirupsen/logrus"
@@ -100,26 +98,4 @@ func downloadImage(image string, index int, wg *sync.WaitGroup) {
 		log.Fatal(err)
 	}
 	fmt.Println("Downloaded to: ", f.Name())
-}
-
-func cronTab(interval string) {
-	currentDir, err := os.Getwd()
-	if err != nil {
-		log.Fatal(err)
-	}
-	dir := currentDir + "/main > /dev/null 2>&1"
-	newJob := fmt.Sprintf("*/5 * * * * %s", dir)
-	cmd := exec.Command("crontab", "-l")
-	stdout, err := cmd.Output()
-	if err != nil {
-		log.Fatal(err)
-	}
-	newJobs := string(stdout) + newJob + "\n"
-	cmd = exec.Command("crontab", "-")
-	cmd.Stdin = strings.NewReader(newJobs)
-	stdout, err = cmd.Output()
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(string(stdout))
 }
