@@ -6,10 +6,12 @@ package cmd
 import (
 	"fmt"
 	"io/ioutil"
-	"main/services"
+	"main/pkg/services"
 	"math/rand"
+	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -21,19 +23,33 @@ var setCmd = &cobra.Command{
 	Short: "A command to set wallpaper",
 	Long:  `Set wallpaper .`,
 	Run: func(cmd *cobra.Command, args []string) {
-		dft := "5m"
-		if len(args) > 0 {
-			dft = args[0]
-		}
-		c := map[string]string{
-			"interval": dft,
-		}
-		config := services.NewConfigService()
-		if err := config.Set(c); err != nil {
-			fmt.Println("viola")
-		}
-		// setWallpaper()
+		triggerAction(cmd)
 	},
+}
+
+func triggerAction(cmd *cobra.Command) {
+	format := "hm"
+	interval := "5m"
+	value := cmd.Flags().Lookup("interval").Value.String()
+	if value != "" {
+		interval = value
+	}
+	// timeFormat := interval[len(interval)-1:]
+
+	if !strings.ContainsAny(interval, format) {
+		log.Fatal("Interval must be in format in minutes or hours, example: 5m, 1h")
+		os.Exit(1)
+	}
+	config := services.NewConfigService()
+	config.Set("config.interval", interval)
+
+	// -- Check if file exist in image directory
+	// get image path from config
+	path := config.Get("config.image_path")
+	if path == "" {
+		// call download image here
+	}
+	// set wallpaper
 }
 
 func init() {
