@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-const IMAGE_DIR = "images"
+const IMAGE_DIR = "./.wallpaper_config/images"
 
 func main() {
 	go createImageDir()

@@ -38,24 +38,30 @@ func triggerAction(cmd *cobra.Command) {
 
 	if !strings.ContainsAny(interval, format) {
 		log.Fatal("Interval must be in format in minutes or hours, example: 5m, 1h")
-		os.Exit(1)
 	}
 	config := services.NewConfigService()
 	config.Set("config.interval", interval)
 
 	// -- Check if file exist in image directory
-	// get image path from config
-	path := config.Get("config.image_path")
-	if path == "" {
-		// call download image here
+	p := config.Get("config.image_path")
+	if p == "" {
+		log.Fatal("Wallpaper: config is broken, please check your config file")
 	}
-	// set wallpaper
+	// check if file exist in directory
+	filePath := fmt.Sprintf("%s/0.jpg", p)
+	if _, err := os.Stat(filePath); err != nil {
+		if os.IsNotExist(err) {
+			fmt.Println("Download image here")
+		}
+	} else {
+		// setWallpaper()
+		fmt.Println("Set file as wallpaper")
+	}
 }
 
 func init() {
 	rootCmd.AddCommand(setCmd)
 	setCmd.Flags().StringP("interval", "i", "", "set interval time to change wallpaper, default is 5m")
-	// setCmd.PersistentFlags().String("foo", "", "A help for foo")
 }
 
 func setWallpaper() {
@@ -69,14 +75,12 @@ func setWallpaper() {
 	random := rand.Intn(len(f))
 	file := f[random].Name()
 	filepath, _ := filepath.Abs(dir + "/" + file)
-	fmt.Println(filepath)
 
 	cmd := exec.Command("osascript", "-e", fmt.Sprintf("tell application \"Finder\" to set desktop picture to POSIX file \"%s\"", filepath))
 
-	output, err := cmd.Output()
+	_, err = cmd.Output()
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(string(output))
 }
