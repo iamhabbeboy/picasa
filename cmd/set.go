@@ -6,6 +6,7 @@ package cmd
 import (
 	"fmt"
 	"io/ioutil"
+	"main/services"
 	"math/rand"
 	"os/exec"
 	"path/filepath"
@@ -20,18 +21,25 @@ var setCmd = &cobra.Command{
 	Short: "A command to set wallpaper",
 	Long:  `Set wallpaper .`,
 	Run: func(cmd *cobra.Command, args []string) {
-		setWallpaper()
+		dft := "5m"
+		if len(args) > 0 {
+			dft = args[0]
+		}
+		c := map[string]string{
+			"interval": dft,
+		}
+		config := services.NewConfigService()
+		if err := config.Set(c); err != nil {
+			fmt.Println("viola")
+		}
+		// setWallpaper()
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(setCmd)
-	setCmd.Flags().StringP("title", "t", "", "specify task title / heading")
+	setCmd.Flags().StringP("interval", "i", "", "set interval time to change wallpaper, default is 5m")
 	// setCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// setCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 func setWallpaper() {
