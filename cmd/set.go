@@ -24,11 +24,12 @@ var setCmd = &cobra.Command{
 	Short: "A command to set wallpaper",
 	Long:  `Set wallpaper .`,
 	Run: func(cmd *cobra.Command, args []string) {
-		triggerAction(cmd)
+		config := services.NewConfigService()
+		triggerAction(cmd, config)
 	},
 }
 
-func triggerAction(cmd *cobra.Command) {
+func triggerAction(cmd *cobra.Command, config *services.ConfigService) {
 	format := "hm"
 	interval := "5m"
 	value := cmd.Flags().Lookup("interval").Value.String()
@@ -44,24 +45,20 @@ func triggerAction(cmd *cobra.Command) {
 		log.Fatal("Interval must be in format in minutes or hours, example: 5m, 1h")
 	}
 
-	config := services.NewConfigService()
 	config.Set("config.interval", interval)
 
 	res := pkg.GetTimeToCrontabFormat(interval)
-	b, _ := pkg.GetCronjobExists(res)
-	fmt.Println(b)
-	// pkg.SetCronTab(res)
+	if !pkg.HasCronjob(res) {
+		pkg.SetCronTab(res)
+	}
 
 	p := config.Get("config.image_path")
 	if p == "" {
 		log.Fatal("Wallpaper: config is broken, please check your config file")
 	}
-	// check if file exist in directory
+
 	if hasImageDownloaded(p) {
-		// setWallpaper()
-		fmt.Println("Wallpaper: wallpaper has been set")
-	} else {
-		fmt.Println("Wallpaper: wallpaper has not been set")
+		setWallpaper(p)
 	}
 }
 
@@ -78,8 +75,8 @@ func hasImageDownloaded(p string) bool {
 	return true
 }
 
-func setWallpaper() {
-	dir := IMAGE_DIR + "/"
+func setWallpaper(path string) {
+	dir := path + "/"
 	f, err := ioutil.ReadDir(dir)
 	if err != nil {
 		fmt.Println(err.Error())

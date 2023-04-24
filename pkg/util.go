@@ -42,7 +42,7 @@ func SetCronTab(timing string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	dir := currentDir + "/wallpaper > /dev/null 2>&1"
+	dir := currentDir + "/wallpaper set > /dev/null 2>&1"
 	newJob := fmt.Sprintf("%s %s", timing, dir)
 	cmd := exec.Command("crontab", "-l")
 	stdout, err := cmd.Output()
@@ -59,18 +59,15 @@ func SetCronTab(timing string) {
 	fmt.Println(string(stdout))
 }
 
-func GetCronjobExists(cronjob string) (bool, error) {
-	// Get the current crontab
+func HasCronjob(cronjob string) bool {
 	cmd := exec.Command("crontab", "-l")
 	var stdout, stderr bytes.Buffer
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
 	err := cmd.Run()
 	if err != nil {
-		return false, fmt.Errorf("error running 'crontab -l': %s", err.Error())
+		return false
 	}
-	fmt.Println(stdout.String())
 
-	// If we get here, the cronjob doesn't exist
-	return false, nil
+	return strings.Contains(stdout.String(), cronjob)
 }

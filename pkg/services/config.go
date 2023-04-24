@@ -22,7 +22,7 @@ func LoadConfig() *viper.Viper {
 	v.SetDefault("config.interval", "5m")
 	v.SetDefault("api.query", "wallpapers")
 	v.SetDefault("api.url", "https://api.unsplash.com/")
-	v.SetDefault("config.image_path", ".wallpaper_config/images")
+	v.SetDefault("config.image_path", fmt.Sprintf("%s/images", configPath))
 	v.SetDefault("api.access_key", "Nw5jS2P4zr_oO_qbFt_39zyj7QTIMI49vYx5lCzxujY")
 	v.SetDefault("api.secret_key", "pseMeAYqR4G1I8cx8vbwkm4HTs1o56NzW6ZiKGHCMNs")
 

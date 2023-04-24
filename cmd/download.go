@@ -4,19 +4,11 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"main/pkg"
 	"main/pkg/services"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-)
-
-const (
-	API_URL    = "https://api.unsplash.com/"
-	ACCESS_KEY = "Nw5jS2P4zr_oO_qbFt_39zyj7QTIMI49vYx5lCzxujY"
-	SECRET_KEY = "pseMeAYqR4G1I8cx8vbwkm4HTs1o56NzW6ZiKGHCMNs"
-	MAX_IMAGE  = "5"
-	QUERY      = "wallpapers"
-	IMAGE_DIR  = "images"
 )
 
 type Image struct {
@@ -37,6 +29,10 @@ var downloadCmd = &cobra.Command{
 	Short: "A command to download images from unsplash.com",
 	Long:  `A command to download images from unsplash.com`,
 	Run: func(cmd *cobra.Command, args []string) {
+		cronWeeklyTask := "0 0 * * 0"
+		if !pkg.HasCronjob(cronWeeklyTask) {
+			pkg.SetCronTab(cronWeeklyTask)
+		}
 		processImages()
 	},
 }
