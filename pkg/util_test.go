@@ -23,3 +23,8 @@ func TestUtil(t *testing.T) {
 	// test for 30hour
 	assert.Equal(t, GetTimeToCrontabFormat(""), "*/5 * * * *", "empty should equal * */5 * * *")
 }
+
+func TestSetCronTab(t *testing.T) {
+	SetCronTab("")
+	// assert.Equal(t, , "*/5 * * * *", "empty should equal * */5 * * *")
+}

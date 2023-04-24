@@ -40,16 +40,16 @@ func triggerAction(cmd *cobra.Command) {
 		log.Fatal("The maximum chars is 3, Use this formating - 5m, 30m, 1h, 24h, etc")
 	}
 
-	// timeFormat := interval[len(interval)-1:]
-
 	if !strings.ContainsAny(interval, format) {
 		log.Fatal("Interval must be in format in minutes or hours, example: 5m, 1h")
 	}
+
 	config := services.NewConfigService()
 	config.Set("config.interval", interval)
+
 	res := pkg.GetTimeToCrontabFormat(interval)
-	fmt.Println(res)
-	// -- Check if file exist in image directory
+	pkg.SetCronTab(res)
+
 	p := config.Get("config.image_path")
 	if p == "" {
 		log.Fatal("Wallpaper: config is broken, please check your config file")

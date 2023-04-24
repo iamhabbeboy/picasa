@@ -4,7 +4,6 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"fmt"
 	"main/pkg/services"
 
 	log "github.com/sirupsen/logrus"
@@ -38,7 +37,6 @@ var downloadCmd = &cobra.Command{
 	Short: "A command to download images from unsplash.com",
 	Long:  `A command to download images from unsplash.com`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("download called")
 		processImages()
 	},
 }

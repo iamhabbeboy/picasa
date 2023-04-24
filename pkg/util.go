@@ -2,8 +2,12 @@ package pkg
 
 import (
 	"fmt"
+	"log"
+	"os"
+	"os/exec"
 	"regexp"
 	"strconv"
+	"strings"
 )
 
 func GetTimeToCrontabFormat(dur string) string {
@@ -30,4 +34,26 @@ func GetTimeToCrontabFormat(dur string) string {
 	}
 
 	return "*/5 * * * *"
+}
+
+func SetCronTab(timing string) {
+	currentDir, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
+	dir := currentDir + "/wallpaper > /dev/null 2>&1"
+	newJob := fmt.Sprintf("%s %s", timing, dir)
+	cmd := exec.Command("crontab", "-l")
+	stdout, err := cmd.Output()
+	if err != nil {
+		log.Fatal(err)
+	}
+	newJobs := string(stdout) + newJob + "\n"
+	cmd = exec.Command("crontab", "-")
+	cmd.Stdin = strings.NewReader(newJobs)
+	stdout, err = cmd.Output()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(string(stdout))
 }
