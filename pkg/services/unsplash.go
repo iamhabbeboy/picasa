@@ -33,14 +33,16 @@ func NewUnleaseService() *UnleaseService {
 	}
 }
 
-func (u *UnleaseService) GetImage() {
+func (u *UnleaseService) GetImages(q string) {
 	api_url := u.config.Get("api.url")
-	query := u.config.Get("api.query")
+	// query := u.config.Get("api.query")
 	max_image := u.config.Get("config.max_image")
 	access_key := u.config.Get("api.access_key")
 	image_path := u.config.Get("config.image_path")
 
-	url := fmt.Sprintf("%s/search/photos?query=%s&per_page=%v&&client_id=%s", api_url, query, max_image, access_key)
+	url := fmt.Sprintf("%s/search/photos?query=%s&per_page=%v&client_id=%s", api_url, q, max_image, access_key)
+	// url := fmt.Sprintf("%sphotos/random&client_id=%s", api_url, access_key)
+	fmt.Println(url)
 	result := getImage(url)
 	var wg sync.WaitGroup
 	for key, v := range result.Results {

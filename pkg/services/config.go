@@ -1,6 +1,8 @@
 package services
 
 import (
+	"fmt"
+
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
@@ -11,9 +13,10 @@ type ConfigService struct {
 
 func LoadConfig() *viper.Viper {
 	v := viper.New()
+	configPath := "./.wallpaper"
 
 	v.SetConfigName("config")
-	v.AddConfigPath("./.wallpaper_config")
+	v.AddConfigPath(configPath)
 
 	v.SetDefault("config.max_image", 5)
 	v.SetDefault("config.interval", "5m")
@@ -24,7 +27,7 @@ func LoadConfig() *viper.Viper {
 	v.SetDefault("api.secret_key", "pseMeAYqR4G1I8cx8vbwkm4HTs1o56NzW6ZiKGHCMNs")
 
 	// Write the configuration options to a YAML file
-	if err := v.WriteConfigAs("./.wallpaper_config/config.yaml"); err != nil {
+	if err := v.WriteConfigAs(fmt.Sprintf("%s/config.yaml", configPath)); err != nil {
 		log.Fatalf("Error writing configuration file: %s", err)
 	}
 

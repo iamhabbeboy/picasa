@@ -6,6 +6,7 @@ package cmd
 import (
 	"fmt"
 	"io/ioutil"
+	"main/pkg"
 	"main/pkg/services"
 	"math/rand"
 	"os"
@@ -34,6 +35,11 @@ func triggerAction(cmd *cobra.Command) {
 	if value != "" {
 		interval = value
 	}
+
+	if len(interval) > 3 {
+		log.Fatal("The maximum chars is 3, Use this formating - 5m, 30m, 1h, 24h, etc")
+	}
+
 	// timeFormat := interval[len(interval)-1:]
 
 	if !strings.ContainsAny(interval, format) {
@@ -41,27 +47,33 @@ func triggerAction(cmd *cobra.Command) {
 	}
 	config := services.NewConfigService()
 	config.Set("config.interval", interval)
-
+	res := pkg.GetTimeToCrontabFormat(interval)
+	fmt.Println(res)
 	// -- Check if file exist in image directory
 	p := config.Get("config.image_path")
 	if p == "" {
 		log.Fatal("Wallpaper: config is broken, please check your config file")
 	}
 	// check if file exist in directory
-	filePath := fmt.Sprintf("%s/0.jpg", p)
-	if _, err := os.Stat(filePath); err != nil {
-		if os.IsNotExist(err) {
-			fmt.Println("Download image here")
-		}
-	} else {
+	if hasImageDownloaded(p) {
 		// setWallpaper()
-		fmt.Println("Set file as wallpaper")
+		fmt.Println("Wallpaper: wallpaper has been set")
+	} else {
+		fmt.Println("Wallpaper: wallpaper has not been set")
 	}
 }
 
 func init() {
 	rootCmd.AddCommand(setCmd)
 	setCmd.Flags().StringP("interval", "i", "", "set interval time to change wallpaper, default is 5m")
+}
+
+func hasImageDownloaded(p string) bool {
+	filePath := fmt.Sprintf("%s/0.jpg", p)
+	if _, err := os.Stat(filePath); err != nil {
+		return os.IsNotExist(err)
+	}
+	return true
 }
 
 func setWallpaper() {
