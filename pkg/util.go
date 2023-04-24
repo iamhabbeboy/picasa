@@ -71,3 +71,36 @@ func HasCronjob(cronjob string) bool {
 
 	return strings.Contains(stdout.String(), cronjob)
 }
+
+func RemoveCronTab(cronjob string) bool {
+	if HasCronjob(cronjob) {
+		cli := exec.Command("crontab", "-l")
+		var stdout, stderr bytes.Buffer
+		cli.Stdout = &stdout
+		cli.Stderr = &stderr
+		err := cli.Run()
+		if err != nil {
+			return false
+		}
+
+		lines := strings.Split(stdout.String(), "\n")
+		var newLines []string
+		for _, line := range lines {
+			if !strings.Contains(line, cronjob) {
+				newLines = append(newLines, line)
+			}
+		}
+
+		newCron := strings.Join(newLines, "\n")
+		cmd1x := exec.Command("crontab", "-")
+		cmd1x.Stdin = strings.NewReader(newCron)
+		var stdot []byte
+		stdot, err = cmd1x.Output()
+		if err != nil {
+			return false
+		}
+		fmt.Println(string(stdot))
+		return true
+	}
+	return false
+}
