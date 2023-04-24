@@ -1,6 +1,7 @@
 package pkg
 
 import (
+	"bytes"
 	"fmt"
 	"log"
 	"os"
@@ -56,4 +57,20 @@ func SetCronTab(timing string) {
 		log.Fatal(err)
 	}
 	fmt.Println(string(stdout))
+}
+
+func GetCronjobExists(cronjob string) (bool, error) {
+	// Get the current crontab
+	cmd := exec.Command("crontab", "-l")
+	var stdout, stderr bytes.Buffer
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
+	err := cmd.Run()
+	if err != nil {
+		return false, fmt.Errorf("error running 'crontab -l': %s", err.Error())
+	}
+	fmt.Println(stdout.String())
+
+	// If we get here, the cronjob doesn't exist
+	return false, nil
 }

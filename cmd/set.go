@@ -48,7 +48,9 @@ func triggerAction(cmd *cobra.Command) {
 	config.Set("config.interval", interval)
 
 	res := pkg.GetTimeToCrontabFormat(interval)
-	pkg.SetCronTab(res)
+	b, _ := pkg.GetCronjobExists(res)
+	fmt.Println(b)
+	// pkg.SetCronTab(res)
 
 	p := config.Get("config.image_path")
 	if p == "" {
