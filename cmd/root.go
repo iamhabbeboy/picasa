@@ -12,8 +12,8 @@ import (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "main",
-	Short: "A simple CLI tool that downloads random pictures from [unsplash] and use it as a wallpaper.",
-	Long:  `A simple CLI tool that downloads random pictures from [unsplash] and use it as a wallpaper.`,
+	Short: "Manage the desktop wallpaper with random images from unsplash.",
+	Long:  `Manage the desktop wallpaper with random images from unsplash.`,
 }
 
 func Execute() {

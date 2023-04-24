@@ -21,7 +21,7 @@ import (
 // setCmd represents the set command
 var setCmd = &cobra.Command{
 	Use:   "set",
-	Short: "A command to set wallpaper",
+	Short: "Set random wallpaper",
 	Long:  `Set wallpaper .`,
 	Run: func(cmd *cobra.Command, args []string) {
 		config := services.NewConfigService()

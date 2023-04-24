@@ -8,7 +8,7 @@ import (
 )
 
 type ConfigService struct {
-	db *viper.Viper
+	Db *viper.Viper
 }
 
 func LoadConfig() *viper.Viper {
@@ -41,17 +41,17 @@ func LoadConfig() *viper.Viper {
 func NewConfigService() *ConfigService {
 	config := LoadConfig()
 	return &ConfigService{
-		db: config,
+		Db: config,
 	}
 }
 
 func (c *ConfigService) Get(key string) string {
-	return c.db.GetString(key)
+	return c.Db.GetString(key)
 }
 
 func (c *ConfigService) Set(key string, value string) error {
-	c.db.Set(key, value)
-	err := c.db.WriteConfig()
+	c.Db.Set(key, value)
+	err := c.Db.WriteConfig()
 	if err != nil {
 		log.Fatal("Error writing config file:", err)
 	}

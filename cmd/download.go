@@ -25,8 +25,8 @@ type Image struct {
 // downloadCmd represents the download command
 var downloadCmd = &cobra.Command{
 	Use:   "download",
-	Short: "A command to download images from unsplash.com",
-	Long:  `A command to download images from unsplash.com`,
+	Short: "Download images from unsplash.com",
+	Long:  `Download images from unsplash.com`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cronWeeklyTask := "0 0 * * 0"
 		if !pkg.HasCronjob(cronWeeklyTask) {
