@@ -7,7 +7,6 @@ import (
 	"main/pkg"
 	"main/pkg/services"
 
-	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -39,9 +38,6 @@ var downloadCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(downloadCmd)
-
-	log.SetLevel(log.InfoLevel)
-	log.SetFormatter(&log.TextFormatter{FullTimestamp: true})
 }
 
 func processImages() {
