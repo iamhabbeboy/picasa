@@ -1,7 +1,6 @@
 package services
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/mock"
@@ -17,6 +16,5 @@ func TestService(t *testing.T) {
 	// svc := NewImageServicer("unsplash")
 	testObj := new(MyMockedObject)
 	testObj.On("GetImages", "nigeria").Return("nigeria")
-	fmt.Println(testObj)
 	// assert.Equal(t, svc, &UnsplashService{}, "UnsplashService should be returned")
 }

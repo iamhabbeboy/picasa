@@ -5,6 +5,8 @@ package cmd
 
 import (
 	"fmt"
+	"log"
+	"main/pkg"
 	"main/pkg/services"
 
 	"github.com/spf13/cobra"
@@ -37,10 +39,13 @@ var configCmd = &cobra.Command{
 			config.Set("config.secret_key", secretKey)
 		}
 		if query != "" {
-			config.Set("config.max_image", query)
+			config.Set("api.query", query)
 		}
 		if maxImage != "" {
-			config.Set("config.query", maxImage)
+			if pkg.HasLetters(maxImage) {
+				log.Fatal("max Image requires a number. e.g 5, 10")
+			}
+			config.Set("config.max_image", maxImage)
 		}
 		fmt.Println("Wallpaper: config updated successfully")
 	},

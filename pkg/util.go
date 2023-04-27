@@ -42,7 +42,7 @@ func SetCronTab(timing string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	dir := currentDir + "/wallpaper set > /dev/null 2>&1"
+	dir := currentDir + "/wallpaper set"
 	newJob := fmt.Sprintf("%s %s", timing, dir)
 	cmd := exec.Command("crontab", "-l")
 	stdout, err := cmd.Output()
@@ -103,4 +103,10 @@ func RemoveCronTab(cronjob string) bool {
 		return true
 	}
 	return false
+}
+
+func HasLetters(arg string) bool {
+	re := regexp.MustCompile("[a-zA-Z]+")
+	num := re.FindString(arg)
+	return num != ""
 }

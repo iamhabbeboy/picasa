@@ -28,3 +28,11 @@ func TestUtil(t *testing.T) {
 // 	SetCronTab("")
 // 	// assert.Equal(t, , "*/5 * * * *", "empty should equal * */5 * * *")
 // }
+
+func TestIsNumber(t *testing.T) {
+	assert.Equal(t, HasLetters("5abc"), true, "5abc should equals to true")
+
+	assert.Equal(t, HasLetters("acc"), true, "acc should equals to true")
+
+	assert.Equal(t, HasLetters("5"), false, "5 should not equals to true")
+}
