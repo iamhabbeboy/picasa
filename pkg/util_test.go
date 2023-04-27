@@ -20,7 +20,7 @@ func TestUtil(t *testing.T) {
 	// test for 30hour
 	assert.Equal(t, GetTimeToCrontabFormat("30h"), "* */24 * * *", "30h should equal * */24 * * *")
 
-	// test for 30hour
+	// test for empty data
 	assert.Equal(t, GetTimeToCrontabFormat(""), "*/5 * * * *", "empty should equal * */5 * * *")
 }
 
