@@ -6,8 +6,8 @@ package cmd
 import (
 	"fmt"
 	"log"
-	"main/pkg"
-	"main/pkg/services"
+	"main/internal"
+	"main/internal/api"
 
 	"github.com/spf13/cobra"
 )
@@ -28,7 +28,7 @@ var configCmd = &cobra.Command{
 			fmt.Println("Wallpaper: nothing to update")
 			return
 		}
-		config := services.NewConfigService()
+		config := api.NewConfigService()
 		if interval != "" {
 			config.Set("config.interval", interval)
 		}
@@ -42,7 +42,7 @@ var configCmd = &cobra.Command{
 			config.Set("api.query", query)
 		}
 		if maxImage != "" {
-			if pkg.HasLetters(maxImage) {
+			if internal.HasLetters(maxImage) {
 				log.Fatal("max Image requires a number. e.g 5, 10")
 			}
 			config.Set("config.max_image", maxImage)

@@ -6,8 +6,8 @@ package cmd
 import (
 	"fmt"
 	"io/ioutil"
-	"main/pkg"
-	"main/pkg/services"
+	"main/internal"
+	"main/internal/api"
 	"math/rand"
 	"os"
 	"os/exec"
@@ -24,17 +24,22 @@ var setCmd = &cobra.Command{
 	Short: "Set random wallpaper",
 	Long:  `Set wallpaper .`,
 	Run: func(cmd *cobra.Command, args []string) {
-		config := services.NewConfigService()
+		config := api.NewConfigService()
 		triggerAction(cmd, config)
 	},
 }
 
-func triggerAction(cmd *cobra.Command, config *services.ConfigService) {
+func triggerAction(cmd *cobra.Command, config *api.ConfigService) {
 	format := "hm"
 	interval := "5m"
 	value := cmd.Flags().Lookup("interval").Value.String()
 	if value != "" {
-		interval = value
+		intervalValueFromConfig := config.Get("config.interval")
+		if intervalValueFromConfig != "" {
+			interval = intervalValueFromConfig
+		} else {
+			interval = value
+		}
 	}
 
 	if len(interval) > 3 {
@@ -47,9 +52,9 @@ func triggerAction(cmd *cobra.Command, config *services.ConfigService) {
 
 	config.Set("config.interval", interval)
 
-	res := pkg.GetTimeToCrontabFormat(interval)
-	if !pkg.HasCronjob(res) {
-		pkg.SetCronTab(res)
+	res := internal.GetTimeToCrontabFormat(interval)
+	if !internal.HasCronjob(res) {
+		internal.SetCronTab(res)
 	}
 
 	p := config.Get("config.image_path")

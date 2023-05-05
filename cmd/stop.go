@@ -5,7 +5,7 @@ package cmd
 
 import (
 	"fmt"
-	"main/pkg"
+	"main/internal"
 
 	"github.com/spf13/cobra"
 )
@@ -16,7 +16,7 @@ var stopCmd = &cobra.Command{
 	Short: "Stop all services",
 	Long:  `Stop all wallpaper cronjobs`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if pkg.RemoveCronTab("wallpaper") {
+		if internal.RemoveCronTab("wallpaper") {
 			fmt.Println("Stopped wallpaper cronjob")
 		}
 	},
