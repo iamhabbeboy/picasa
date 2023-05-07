@@ -10,6 +10,10 @@ import (
 	"strings"
 )
 
+const (
+	APP_NAME = "wallpaper"
+)
+
 func GetTimeToCrontabFormat(dur string) string {
 	if dur == "" {
 		return "*/5 * * * *"
@@ -37,11 +41,7 @@ func GetTimeToCrontabFormat(dur string) string {
 }
 
 func SetCronTab(timing string) {
-	// currentDir, err := user.Current()
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	dir := "/usr/local/bin/random-wallpaper set"
+	dir := fmt.Sprintf("/usr/local/bin/%s set", APP_NAME)
 	newJob := fmt.Sprintf("%s %s", timing, dir)
 	cmd := exec.Command("crontab", "-l")
 	stdout, err := cmd.Output()

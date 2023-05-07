@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	"main/internal"
 	"os/user"
 
 	log "github.com/sirupsen/logrus"
@@ -18,14 +19,15 @@ func LoadConfig() *viper.Viper {
 	if err != nil {
 		log.Fatal(err)
 	}
-	configPath := h.HomeDir + "/.wallpaper"
+	appName := internal.APP_NAME
+	configPath := fmt.Sprintf("%s/.%s", h.HomeDir, appName)
 
 	v.SetConfigName("config")
 	v.AddConfigPath(configPath)
 
 	v.SetDefault("config.max_image", 10)
 	v.SetDefault("config.interval", "5m")
-	v.SetDefault("api.query", "wallpapers")
+	v.SetDefault("api.query", "nature")
 	v.SetDefault("api.url", "https://api.unsplash.com/")
 	v.SetDefault("config.image_path", fmt.Sprintf("%s/images", configPath))
 	v.SetDefault("api.access_key", "Nw5jS2P4zr_oO_qbFt_39zyj7QTIMI49vYx5lCzxujY")

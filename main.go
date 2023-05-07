@@ -4,11 +4,11 @@ Copyright © 2023 Abiodun Azeez iamhabbeboy@gmail.com
 package main
 
 import (
+	"fmt"
 	"main/cmd"
+	"main/internal"
 	"os"
 )
-
-const IMAGE_DIR = "./.wallpaper/images"
 
 func main() {
 	go createImageDir()
@@ -16,8 +16,10 @@ func main() {
 }
 
 func createImageDir() bool {
-	if _, err := os.Stat(IMAGE_DIR); os.IsNotExist(err) {
-		err := os.MkdirAll(IMAGE_DIR, 0755)
+	app := internal.APP_NAME
+	imgDir := fmt.Sprintf("./.%s/images", app)
+	if _, err := os.Stat(imgDir); os.IsNotExist(err) {
+		err := os.MkdirAll(imgDir, 0755)
 		return err == nil
 	}
 	return true
