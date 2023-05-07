@@ -11,7 +11,8 @@ import (
 )
 
 const (
-	APP_NAME = "wallpaper"
+	APP_NAME    = "rwallpaper"
+	CRON_WEEKLY = "0 0 * * 0"
 )
 
 func GetTimeToCrontabFormat(dur string) string {
@@ -40,9 +41,8 @@ func GetTimeToCrontabFormat(dur string) string {
 	return "*/5 * * * *"
 }
 
-func SetCronTab(timing string) {
-	dir := fmt.Sprintf("/usr/local/bin/%s set", APP_NAME)
-	newJob := fmt.Sprintf("%s %s", timing, dir)
+func SetCronTab(timing string, command string) {
+	newJob := fmt.Sprintf("%s %s", timing, command)
 	cmd := exec.Command("crontab", "-l")
 	stdout, err := cmd.Output()
 	if err != nil {

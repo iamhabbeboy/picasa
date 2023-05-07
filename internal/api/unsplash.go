@@ -31,16 +31,14 @@ func NewUnleaseService() *UnleaseService {
 	}
 }
 
-func (u *UnleaseService) GetImages(q string) {
+func (u *UnleaseService) GetImages() {
 	apiUrl := u.config.Get("api.url")
-	// query := u.config.Get("api.query")
+	query := u.config.Get("api.query")
 	maxImage := u.config.Get("config.max_image")
 	accessKey := u.config.Get("api.access_key")
 	imagePath := u.config.Get("config.image_path")
 
-	// url := fmt.Sprintf("%s/search/photos?query=%s&per_page=%v&client_id=%s", api_url, q, max_image, access_key)
-	url := fmt.Sprintf("%s/photos/random?client_id=%s&count=%s&orientation=landscape&query=%s", apiUrl, accessKey, maxImage, q)
-	fmt.Println(url)
+	url := fmt.Sprintf("%s/photos/random?client_id=%s&count=%s&orientation=landscape&query=%s", apiUrl, accessKey, maxImage, query)
 	result := getImage(url)
 	var wg sync.WaitGroup
 	for key, v := range result {
@@ -53,9 +51,8 @@ func (u *UnleaseService) GetImages(q string) {
 func getImage(url string) []Image {
 	resp, err := http.Get(url)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Unable to connect to the internet.")
 	}
-	fmt.Println(resp)
 	var p []Image
 	if err := json.NewDecoder(resp.Body).Decode(&p); err != nil {
 		log.Fatal(err)

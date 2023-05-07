@@ -7,6 +7,6 @@ func NewPixabayService() *PixabayService {
 	return &PixabayService{}
 }
 
-func (p *PixabayService) GetImages(q string) {
+func (p *PixabayService) GetImages() {
 	// TODO: Implementation here
 }

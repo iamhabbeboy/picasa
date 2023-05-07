@@ -4,6 +4,8 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"fmt"
+	"main/internal"
 	"main/internal/api"
 
 	"github.com/spf13/cobra"
@@ -27,11 +29,7 @@ var downloadCmd = &cobra.Command{
 	Short: "Download images from unsplash.com",
 	Long:  `Download images from unsplash.com`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// cronWeeklyTask := "0 0 * * 0"
-		// if !pkg.HasCronjob(cronWeeklyTask) {
-		// 	pkg.SetCronTab(cronWeeklyTask)
-		// }
-		processImages()
+		HandleDownloadProcess()
 	},
 }
 
@@ -39,7 +37,16 @@ func init() {
 	rootCmd.AddCommand(downloadCmd)
 }
 
+func HandleDownloadProcess() {
+	cronWeeklyTask := internal.CRON_WEEKLY
+	r := fmt.Sprintf("/usr/local/bin/%s download", internal.APP_NAME)
+	if !internal.HasCronjob(cronWeeklyTask) {
+		internal.SetCronTab(cronWeeklyTask, r)
+	}
+	processImages()
+}
+
 func processImages() {
 	svc := api.NewImageDownload("unsplash")
-	svc.GetImages("nature")
+	svc.GetImages()
 }

@@ -3,7 +3,7 @@ package api
 import "log"
 
 type IimageDownloader interface {
-	GetImages(q string)
+	GetImages()
 }
 
 func NewImageDownload(svc string) IimageDownloader {

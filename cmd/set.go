@@ -22,7 +22,7 @@ import (
 var setCmd = &cobra.Command{
 	Use:   "set",
 	Short: "Set random wallpaper",
-	Long:  `Set wallpaper .`,
+	Long:  `Set wallpaper`,
 	Run: func(cmd *cobra.Command, args []string) {
 		config := api.NewConfigService()
 		triggerAction(cmd, config)
@@ -53,8 +53,10 @@ func triggerAction(cmd *cobra.Command, config *api.ConfigService) {
 	config.Set("config.interval", interval)
 
 	res := internal.GetTimeToCrontabFormat(interval)
+
 	if !internal.HasCronjob(res) {
-		internal.SetCronTab(res)
+		r := fmt.Sprintf("/usr/local/bin/%s set", internal.APP_NAME)
+		internal.SetCronTab(res, r)
 	}
 
 	p := config.Get("config.image_path")
@@ -62,9 +64,10 @@ func triggerAction(cmd *cobra.Command, config *api.ConfigService) {
 		log.Fatal("Wallpaper: config is broken, please check your config file")
 	}
 
-	if hasImageDownloaded(p) {
-		setWallpaper(p)
+	if !hasImageDownloaded(p) {
+		HandleDownloadProcess()
 	}
+	setWallpaper(p)
 }
 
 func init() {
@@ -76,7 +79,7 @@ func init() {
 func hasImageDownloaded(p string) bool {
 	filePath := fmt.Sprintf("%s/0.jpg", p)
 	if _, err := os.Stat(filePath); err != nil {
-		return os.IsNotExist(err)
+		return false
 	}
 	return true
 }
@@ -85,7 +88,6 @@ func setWallpaper(path string) {
 	dir := path + "/"
 	f, err := ioutil.ReadDir(dir)
 	if err != nil {
-		fmt.Println(err.Error())
 		log.Fatal(err)
 	}
 
@@ -97,7 +99,7 @@ func setWallpaper(path string) {
 
 	_, err = cmd.Output()
 	if err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 		return
 	}
 }

@@ -15,7 +15,7 @@ type MyMockedObject struct {
 	mock.Mock
 }
 
-func TestDownloadFile(t *testing.T) {
+func TestDownloadImage(t *testing.T) {
 	// Create a mock server
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Serve a file with some content

@@ -11,9 +11,9 @@ import (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "wallpaper",
-	Short: "Manage the desktop wallpaper with random images from unsplash.",
-	Long:  `Manage the desktop wallpaper with random images from unsplash.`,
+	Use:   "rwallpaper",
+	Short: "Manage your desktop wallpaper with random images from unsplash, pixabay, etc.",
+	Long:  `Manage your desktop wallpaper with random images from unsplash, , pixabay, etc`,
 }
 
 func Execute() {
@@ -25,6 +25,5 @@ func Execute() {
 
 func init() {
 	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.main.yaml)")
-
 	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
