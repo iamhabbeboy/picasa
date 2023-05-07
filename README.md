@@ -1,13 +1,25 @@
-# wallpaper
+# Random wallpaper - rwallpaper
 
 Introducing the Random Wallpaper Tool for Mac OSX and Linux *(coming soon)*
 
-Are you tired of staring at the same old wallpaper on your Mac every day? Do you want to add some variety and spice up your desktop? Look no further than our Random Wallpaper Tool!
+Are you tired of staring at the same wallpaper on your Mac every day? Do you want to add some variety and spice up your desktop? Look no further than Random Wallpaper!
 
 A simple CLI tool that downloads random pictures from [unsplash](unsplash.com/) and use it as a wallpaper. 
 
+> NB: The random change of the wallpaper rely solely on cronjob, which means the tool will request access to edit your crontab.
+
+Download release and copy to `/usr/local/bin/` folder so it can be available globally using
+
 ```
-> wallpaper set --interval 5
+ > cp rwallpaper /usr/local/bin
+```
+
+```
+> rwallpaper set --interval 5m
+```
+
+```
+ > rwallpaper set -i 24h
 ```
 
 - 5m - 5 minutes
@@ -23,5 +35,9 @@ Due to unsplash policy, the secret key used for this project might stop working 
 > wallpaper config --access_token xklkejwerlkjk --secret_key lwkejrklwjerlkjwelkrj
 ```
 
-
-You can set time interval for wallpaper change
+Change image query
+The default image query type is `nature` which means that you only get nature related images, but you can decide to change the image query with:
+```
+> rwallpaper config -q water
+```
+You will only see the effect after the cronjob execute to download next set of images.
