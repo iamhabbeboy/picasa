@@ -1,5 +1,2 @@
 .DS_Store
-images/*
-.wallpaper
-wallpaper
-rwallpaper
+.rwallpaper
