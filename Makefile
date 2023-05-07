@@ -1,5 +1,5 @@
 build:
-	go build -o wallpaper
+	go build -o rwallpaper
 
 test:
 	go test -v ./...
