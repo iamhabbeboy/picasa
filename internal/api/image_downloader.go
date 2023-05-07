@@ -8,11 +8,11 @@ type IimageDownloader interface {
 
 func NewImageDownload(svc string) IimageDownloader {
 	if svc == "" {
-		log.Fatal("Service not found")
+		log.Fatal("API Service not found")
 	}
 	app := map[string]IimageDownloader{
 		"unsplash": NewUnleaseService(),
-		"pic":      NewPicServer(),
+		"pixabay":  NewPixabayService(),
 	}
 	return app[svc]
 }

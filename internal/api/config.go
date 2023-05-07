@@ -23,7 +23,7 @@ func LoadConfig() *viper.Viper {
 	v.SetConfigName("config")
 	v.AddConfigPath(configPath)
 
-	v.SetDefault("config.max_image", 5)
+	v.SetDefault("config.max_image", 10)
 	v.SetDefault("config.interval", "5m")
 	v.SetDefault("api.query", "wallpapers")
 	v.SetDefault("api.url", "https://api.unsplash.com/")

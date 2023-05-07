@@ -70,6 +70,7 @@ func triggerAction(cmd *cobra.Command, config *api.ConfigService) {
 func init() {
 	rootCmd.AddCommand(setCmd)
 	setCmd.Flags().StringP("interval", "i", "", "set interval time to change wallpaper, default is 5m")
+	setCmd.Flags().StringP("query", "q", "", "set a query filter for image type, default is nature")
 }
 
 func hasImageDownloaded(p string) bool {

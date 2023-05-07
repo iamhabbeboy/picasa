@@ -16,15 +16,13 @@ type UnleaseService struct {
 }
 
 type Image struct {
-	Results []struct {
-		Urls struct {
-			Raw  string `json:"raw"`
-			Full string `json:"full"`
-		}
-		Links struct {
-			Download string `json:"download"`
-		}
-	} `json:"results"`
+	Urls struct {
+		Raw  string `json:"raw"`
+		Full string `json:"full"`
+	} `json:"urls"`
+	Links struct {
+		Download string `json:"download"`
+	} `json:"links"`
 }
 
 func NewUnleaseService() *UnleaseService {
@@ -34,31 +32,31 @@ func NewUnleaseService() *UnleaseService {
 }
 
 func (u *UnleaseService) GetImages(q string) {
-	api_url := u.config.Get("api.url")
+	apiUrl := u.config.Get("api.url")
 	// query := u.config.Get("api.query")
-	max_image := u.config.Get("config.max_image")
-	access_key := u.config.Get("api.access_key")
-	image_path := u.config.Get("config.image_path")
+	maxImage := u.config.Get("config.max_image")
+	accessKey := u.config.Get("api.access_key")
+	imagePath := u.config.Get("config.image_path")
 
-	url := fmt.Sprintf("%s/search/photos?query=%s&per_page=%v&client_id=%s", api_url, q, max_image, access_key)
-	// url := fmt.Sprintf("%sphotos/random&client_id=%s&count=3", api_url, access_key)
+	// url := fmt.Sprintf("%s/search/photos?query=%s&per_page=%v&client_id=%s", api_url, q, max_image, access_key)
+	url := fmt.Sprintf("%s/photos/random?client_id=%s&count=%s&orientation=landscape&query=%s", apiUrl, accessKey, maxImage, q)
 	fmt.Println(url)
 	result := getImage(url)
 	var wg sync.WaitGroup
-	for key, v := range result.Results {
+	for key, v := range result {
 		wg.Add(1)
-		go download(v.Urls.Full, key, &wg, image_path)
+		go download(v.Urls.Full, key, &wg, imagePath)
 	}
 	wg.Wait()
 }
 
-func getImage(url string) Image {
+func getImage(url string) []Image {
 	resp, err := http.Get(url)
 	if err != nil {
 		log.Fatal(err)
 	}
 	fmt.Println(resp)
-	var p Image
+	var p []Image
 	if err := json.NewDecoder(resp.Body).Decode(&p); err != nil {
 		log.Fatal(err)
 	}
