@@ -1,4 +1,4 @@
-# Random wallpaper - rwallpaper
+# Picasa for Unix - rwallpaper
 
 Introducing the Random Wallpaper Tool for Mac OSX and Linux *(coming soon)*
 
