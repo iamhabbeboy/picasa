@@ -61,7 +61,7 @@ func triggerAction(cmd *cobra.Command, config *api.ConfigService) {
 
 	p := config.Get("config.image_path")
 	if p == "" {
-		log.Fatal("Wallpaper: config is broken, please check your config file")
+		log.Fatal("Picasa: config is broken, please check your config file")
 	}
 
 	if !hasImageDownloaded(p) {

@@ -25,7 +25,7 @@ type Image struct {
 	} `json:"links"`
 }
 
-func NewUnleaseService() *UnleaseService {
+func NewUnsplashService() *UnleaseService {
 	return &UnleaseService{
 		config: NewConfigService(),
 	}
@@ -39,6 +39,7 @@ func (u *UnleaseService) GetImages() {
 	imagePath := u.config.Get("config.image_path")
 
 	url := fmt.Sprintf("%s/photos/random?client_id=%s&count=%s&orientation=landscape&query=%s", apiUrl, accessKey, maxImage, query)
+	fmt.Println(url)
 	result := getImage(url)
 	var wg sync.WaitGroup
 	for key, v := range result {

@@ -15,8 +15,8 @@ import (
 // configCmd represents the config command
 var configCmd = &cobra.Command{
 	Use:   "config",
-	Short: "Update wallpaper config",
-	Long:  `Update wallpaper config data.`,
+	Short: "Update picasa config",
+	Long:  `Update picasa config data.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		interval := cmd.Flags().Lookup("interval").Value.String()
 		accessKey := cmd.Flags().Lookup("access_key").Value.String()
@@ -25,7 +25,7 @@ var configCmd = &cobra.Command{
 		maxImage := cmd.Flags().Lookup("max_image").Value.String()
 
 		if interval == "" && accessKey == "" && secretKey == "" && query == "" && maxImage == "" {
-			fmt.Println("Wallpaper: nothing to update")
+			fmt.Println("Picasa: nothing to update")
 			return
 		}
 		config := api.NewConfigService()
@@ -47,7 +47,7 @@ var configCmd = &cobra.Command{
 			}
 			config.Set("config.max_image", maxImage)
 		}
-		fmt.Println("Wallpaper: config updated successfully")
+		fmt.Println("Picasa: config updated successfully")
 	},
 }
 
@@ -56,6 +56,6 @@ func init() {
 	configCmd.Flags().StringP("interval", "i", "", "set interval time to change wallpaper, default is 5m")
 	configCmd.Flags().StringP("access_key", "a", "", "set unsplash access key")
 	configCmd.Flags().StringP("secret_key", "s", "", "set unsplash secret key")
-	configCmd.Flags().StringP("query", "q", "", "set unsplash image query")
+	configCmd.Flags().StringP("query", "q", "", "set unsplash image query(default:nature), e.g food, people, technology, ..")
 	configCmd.Flags().StringP("max_image", "m", "", "set max image to download from unsplash")
 }

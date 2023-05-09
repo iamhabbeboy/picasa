@@ -11,7 +11,7 @@ func NewImageDownload(svc string) IimageDownloader {
 		log.Fatal("API Service not found")
 	}
 	app := map[string]IimageDownloader{
-		"unsplash": NewUnleaseService(),
+		"unsplash": NewUnsplashService(),
 		"pixabay":  NewPixabayService(),
 	}
 	return app[svc]
