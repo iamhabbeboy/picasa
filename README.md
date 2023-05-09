@@ -19,7 +19,7 @@ Download release and copy to `/usr/local/bin/` folder so it can be available glo
 ```
 
 ```
-> picasa set --interval 5m
+> picasa set interval 5m
 ```
 
 ```
