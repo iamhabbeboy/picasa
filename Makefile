@@ -1,5 +1,5 @@
 build:
-	go build -o rwallpaper
+	go build -o picasa && cp picasa /usr/local/bin
 
 test:
 	go test -v ./...

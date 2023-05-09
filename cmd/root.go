@@ -11,7 +11,7 @@ import (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "rwallpaper",
+	Use:   "picasa",
 	Short: "Manage your desktop wallpaper with random images from unsplash, pixabay, etc.",
 	Long:  `Manage your desktop wallpaper with random images from unsplash, , pixabay, etc`,
 }

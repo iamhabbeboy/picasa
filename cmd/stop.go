@@ -16,8 +16,8 @@ var stopCmd = &cobra.Command{
 	Short: "Stop all services",
 	Long:  `Stop all wallpaper cronjobs`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if internal.RemoveCronTab("wallpaper") {
-			fmt.Println("...Stopped wallpaper cronjob")
+		if internal.RemoveCronTab(internal.APP_NAME) {
+			fmt.Print("...Stopped " + internal.APP_NAME + " cronjob")
 		}
 	},
 }

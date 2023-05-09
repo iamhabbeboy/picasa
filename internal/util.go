@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	APP_NAME    = "rwallpaper"
+	APP_NAME    = "picasa"
 	CRON_WEEKLY = "0 0 * * 0"
 )
 

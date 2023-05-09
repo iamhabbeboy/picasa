@@ -11,15 +11,15 @@ A simple CLI tool that downloads random pictures from [unsplash](unsplash.com/) 
 Download release and copy to `/usr/local/bin/` folder so it can be available globally using
 
 ```
- > cp rwallpaper /usr/local/bin
+ > cp picasa /usr/local/bin
 ```
 
 ```
-> rwallpaper set --interval 5m
+> picasa set --interval 5m
 ```
 
 ```
- > rwallpaper set -i 24h
+ > picasa set -i 24h
 ```
 
 - 5m - 5 minutes
