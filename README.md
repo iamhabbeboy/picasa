@@ -1,4 +1,4 @@
-# Picasa for Unix - rwallpaper
+# Picasa for Unix
 
 Introducing the Random Wallpaper Tool for Mac OSX and Linux *(coming soon)*
 
@@ -34,6 +34,9 @@ Download release and copy to `/usr/local/bin/` folder so it can be available glo
 
 ### Configuration
 Due to unsplash policy, the secret key used for this project might stop working at some point, to configure yours; Just head to unsplash and create an app, get the secret key and access point.
+```
+> picasa config -h
+```
 
 ```
 > picasa config --access_token xklkejwerlkjk --secret_key lwkejrklwjerlkjwelkrj
@@ -43,5 +46,15 @@ Change image query
 The default image query type is `nature` which means that you only get nature related images, but you can decide to change the image query with:
 ```
 > picasa config -q water
+```
+
+Change max image download 
+```
+> picasa config --max_image 20
+```
+
+Change image change interval
+```
+> picasa config --interval 24h
 ```
 You will only see the effect after the cronjob execute to download next set of images.
