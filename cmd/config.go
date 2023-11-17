@@ -1,13 +1,7 @@
-/*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
 	"fmt"
-	"log"
-	"main/internal"
-	"main/internal/api"
 
 	"github.com/spf13/cobra"
 )
@@ -18,36 +12,40 @@ var configCmd = &cobra.Command{
 	Short: "Update picasa config",
 	Long:  `Update picasa config data.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		interval := cmd.Flags().Lookup("interval").Value.String()
-		accessKey := cmd.Flags().Lookup("access_key").Value.String()
-		secretKey := cmd.Flags().Lookup("secret_key").Value.String()
-		query := cmd.Flags().Lookup("query").Value.String()
-		maxImage := cmd.Flags().Lookup("max_image").Value.String()
+		// interval := cmd.Flags().Lookup("interval").Value.String()
+		// accessKey := cmd.Flags().Lookup("access_key").Value.String()
+		// secretKey := cmd.Flags().Lookup("secret_key").Value.String()
+		// query := cmd.Flags().Lookup("query").Value.String()
+		// maxImage := cmd.Flags().Lookup("max_image").Value.String()
 
-		if interval == "" && accessKey == "" && secretKey == "" && query == "" && maxImage == "" {
-			fmt.Println("Picasa: nothing to update")
-			return
-		}
-		config := api.NewConfigService()
-		if interval != "" {
-			config.Set("config.interval", interval)
-		}
-		if accessKey != "" {
-			config.Set("config.access_key", accessKey)
-		}
-		if secretKey != "" {
-			config.Set("config.secret_key", secretKey)
-		}
-		if query != "" {
-			config.Set("api.query", query)
-		}
-		if maxImage != "" {
-			if internal.HasLetters(maxImage) {
-				log.Fatal("max Image requires a number. e.g 5, 10")
-			}
-			config.Set("config.max_image", maxImage)
-		}
-		fmt.Println("Picasa: config updated successfully")
+		// if interval == "" && accessKey == "" && secretKey == "" && query == "" && maxImage == "" {
+		// 	fmt.Println("Picasa: nothing to update")
+		// 	return
+		// }
+		// config := api.NewConfigService()
+		// if interval != "" {
+		// 	if err := config.Set("config.interval", interval); err != nil {
+		// 		fmt.Println("Picasa: interval not set")
+		// 		return
+		// 	}
+		// }
+		// 	if accessKey != "" {
+		// 		config.Set("config.access_key", accessKey)
+		// 	}
+		// 	if secretKey != "" {
+		// 		config.Set("config.secret_key", secretKey)
+		// 	}
+		// 	if query != "" {
+		// 		config.Set("api.query", query)
+		// 	}
+		// 	if maxImage != "" {
+		// 		if internal.HasLetters(maxImage) {
+		// 			log.Fatal("max Image requires a number. e.g 5, 10")
+		// 		}
+		// 		config.Set("config.max_image", maxImage)
+		// 	}
+		// 	fmt.Println("Picasa: config updated successfully")
+		fmt.Println("Hello world")
 	},
 }
 

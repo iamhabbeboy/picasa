@@ -43,10 +43,6 @@ func HandleDownloadProcess() {
 	if !internal.HasCronjob(cronWeeklyTask) {
 		internal.SetCronTab(cronWeeklyTask, r)
 	}
-	processImages()
-}
-
-func processImages() {
 	svc := api.NewImageDownload("unsplash")
 	svc.GetImages()
 }

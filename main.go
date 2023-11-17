@@ -5,13 +5,17 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"main/cmd"
 	"main/internal"
 	"os"
 )
 
 func main() {
-	go createImageDir()
+	if !createImageDir() {
+		log.Fatal("Error occured while creating directory")
+	}
+
 	cmd.Execute()
 }
 
