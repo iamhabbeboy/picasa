@@ -4,16 +4,23 @@ import (
 	"bytes"
 	"fmt"
 	"log"
+	"main/internal/api"
 	"os/exec"
+	"os/user"
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/akrylysov/pogreb"
+	"github.com/sirupsen/logrus"
 )
 
 const (
 	APP_NAME    = "picasa"
 	CRON_WEEKLY = "0 0 * * 0"
 )
+
+var DBConfig *api.ConfigService
 
 func GetTimeToCrontabFormat(dur string) string {
 	if dur == "" {
@@ -108,4 +115,40 @@ func HasLetters(arg string) bool {
 	re := regexp.MustCompile("[a-zA-Z]+")
 	num := re.FindString(arg)
 	return num != ""
+}
+
+func InitPogrebDB() {
+	if DBConfig == nil {
+		db, err := pogreb.Open("picasa.db", nil)
+		if err != nil {
+			logrus.Fatal(err.Error())
+		}
+		c := &api.ConfigService{
+			DB: db,
+		}
+		LoadDefaultConfig(c)
+		DBConfig = c
+	}
+}
+
+func LoadDefaultConfig(c *api.ConfigService) {
+	appName := APP_NAME
+	h, err := user.Current()
+	if err != nil {
+		log.Fatal(err)
+	}
+	configPath := fmt.Sprintf("%s/.%s", h.HomeDir, appName)
+	conf := api.ConfigStorer{
+		MaxImage:  10,
+		Interval:  "5m",
+		Query:     "cars",
+		APIUrl:    "https://api.unsplash.com/",
+		ImagePath: fmt.Sprintf("%s/images", configPath),
+		AccessKey: "Nw5jS2P4zr_oO_qbFt_39zyj7QTIMI49vYx5lCzxujY",
+		SecretKey: "pseMeAYqR4G1I8cx8vbwkm4HTs1o56NzW6ZiKGHCMNs",
+	}
+	err = c.SetItem("picasa", conf)
+	if err != nil {
+		log.Printf("error occured while storing config: %s", err.Error())
+	}
 }

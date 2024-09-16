@@ -12,6 +12,7 @@ import (
 )
 
 func main() {
+	internal.InitPogrebDB()
 	if !createImageDir() {
 		log.Fatal("Error occured while creating directory")
 	}

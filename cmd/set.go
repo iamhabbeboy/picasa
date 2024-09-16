@@ -24,7 +24,7 @@ var setCmd = &cobra.Command{
 	Short: "Set random wallpaper",
 	Long:  `Set wallpaper`,
 	Run: func(cmd *cobra.Command, args []string) {
-		config := api.NewConfigService()
+		config := &api.ConfigService{}
 		triggerAction(cmd, config)
 	},
 }

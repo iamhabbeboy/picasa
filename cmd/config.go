@@ -2,6 +2,8 @@ package cmd
 
 import (
 	"fmt"
+	"main/internal"
+	"main/internal/api"
 
 	"github.com/spf13/cobra"
 )
@@ -12,7 +14,7 @@ var configCmd = &cobra.Command{
 	Short: "Update picasa config",
 	Long:  `Update picasa config data.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// interval := cmd.Flags().Lookup("interval").Value.String()
+		interval := cmd.Flags().Lookup("interval").Value.String()
 		// accessKey := cmd.Flags().Lookup("access_key").Value.String()
 		// secretKey := cmd.Flags().Lookup("secret_key").Value.String()
 		// query := cmd.Flags().Lookup("query").Value.String()
@@ -22,12 +24,13 @@ var configCmd = &cobra.Command{
 		// 	fmt.Println("Picasa: nothing to update")
 		// 	return
 		// }
-		// config := api.NewConfigService()
-		// if interval != "" {
-		// 	if err := config.Set("config.interval", interval); err != nil {
-		// 		fmt.Println("Picasa: interval not set")
-		// 		return
-		// 	}
+		c := api.ConfigStorer{}
+		if interval != "" {
+			c.Interval = interval
+			// if err := config.SetItem("config.interval", interval); err != nil {
+			// 	fmt.Println("Picasa: interval not set")
+			// 	return
+		}
 		// }
 		// 	if accessKey != "" {
 		// 		config.Set("config.access_key", accessKey)
@@ -45,7 +48,11 @@ var configCmd = &cobra.Command{
 		// 		config.Set("config.max_image", maxImage)
 		// 	}
 		// 	fmt.Println("Picasa: config updated successfully")
-		fmt.Println("Hello world")
+		conf := internal.DBConfig
+		conf.SetItem("picasa", c)
+		g, _ := conf.GetItem("picasa")
+		fmt.Println(g)
+		fmt.Println("Done")
 	},
 }
 

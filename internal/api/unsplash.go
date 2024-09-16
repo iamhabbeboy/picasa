@@ -27,7 +27,7 @@ type Image struct {
 
 func NewUnsplashService() *UnleaseService {
 	return &UnleaseService{
-		config: NewConfigService(),
+		config: &ConfigService{},
 	}
 }
 

@@ -3,17 +3,12 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"main/internal"
-	"os/user"
 
 	"github.com/akrylysov/pogreb"
-	log "github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 )
 
 type ConfigService struct {
-	Db      *viper.Viper
-	localDB *pogreb.DB
+	DB *pogreb.DB
 }
 
 type ConfigStorer struct {
@@ -61,40 +56,13 @@ var LOCAL_DB_KEY = "picasa"
 // return v
 // }
 
-func NewConfigService() *ConfigService {
-	db, err := InitKeyStore()
-	LoadDefaultConfig(&ConfigService{})
-	if err != nil {
-		log.Printf("error connecting to key-value store db: %s", err.Error())
-	}
-
-	return &ConfigService{
-		// Db:      config,
-		localDB: db,
-	}
-}
-
-func LoadDefaultConfig(c *ConfigService) {
-	appName := internal.APP_NAME
-	h, err := user.Current()
-	if err != nil {
-		log.Fatal(err)
-	}
-	configPath := fmt.Sprintf("%s/.%s", h.HomeDir, appName)
-	conf := ConfigStorer{
-		MaxImage:  10,
-		Interval:  "5m",
-		Query:     "cars",
-		APIUrl:    "https://api.unsplash.com/",
-		ImagePath: fmt.Sprintf("%s/images", configPath),
-		AccessKey: "Nw5jS2P4zr_oO_qbFt_39zyj7QTIMI49vYx5lCzxujY",
-		SecretKey: "pseMeAYqR4G1I8cx8vbwkm4HTs1o56NzW6ZiKGHCMNs",
-	}
-	err = c.SetItem("picasa", conf)
-	if err != nil {
-		log.Printf("error occured while storing config: %s", err.Error())
-	}
-}
+// func NewConfig() *ConfigService {
+// 	LoadDefaultConfig(&ConfigService{})
+// 	return &ConfigService{
+// 		// Db:      config,
+// 		localDB: internal.DBConfig,
+// 	}
+// }
 
 // func (c *ConfigService) Get(key string) string {
 // 	return c.Db.GetString(key)
@@ -109,16 +77,12 @@ func LoadDefaultConfig(c *ConfigService) {
 // 	return nil
 // }
 
-func InitKeyStore() (*pogreb.DB, error) {
-	return pogreb.Open("picasa.test", nil)
-}
-
 func (c *ConfigService) SetItem(key string, value interface{}) error {
 	j, err := json.Marshal(value)
 	if err != nil {
 		return err
 	}
-	err = c.localDB.Put([]byte(key), []byte(string(j)))
+	err = c.DB.Put([]byte(key), []byte(string(j)))
 	if err != nil {
 		return err
 	}
@@ -126,7 +90,7 @@ func (c *ConfigService) SetItem(key string, value interface{}) error {
 }
 
 func (c *ConfigService) GetItem(key string) (ConfigStorer, error) {
-	val, err := c.localDB.Get([]byte(key))
+	val, err := c.DB.Get([]byte(key))
 	if err != nil {
 		return ConfigStorer{}, err
 	}
