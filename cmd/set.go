@@ -5,7 +5,6 @@ package cmd
 
 import (
 	"fmt"
-	"io/ioutil"
 	"main/internal"
 	"main/internal/api"
 	"math/rand"
@@ -89,7 +88,7 @@ func hasImageDownloaded(p string) bool {
 
 func setWallpaper(path string) {
 	dir := path + "/"
-	f, err := ioutil.ReadDir(dir)
+	f, err := os.ReadDir(dir)
 	if err != nil {
 		log.Fatal(err)
 	}

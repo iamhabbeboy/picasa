@@ -1,8 +1,10 @@
 package main
 
 import (
+	"desktop/internal/api"
 	"fmt"
 	"os"
+	"os/exec"
 	"path"
 )
 
@@ -28,4 +30,31 @@ func GetImagesFromDir() []string {
 	}
 	return images
 
+}
+
+func FetchImages(conf api.ImageConfig) {
+	c := api.ImageConfig{}
+
+	if conf.TotalDownloadImage == 0 {
+		c.TotalDownloadImage = 3
+	}
+
+	if conf.Category == "" {
+		c.Category = "nature"
+	}
+
+	svc := api.NewImageDownload("unsplash")
+	svc.GetImages(c)
+	fmt.Println("....Download is complete")
+}
+
+func WallpaperEvent(path string) {
+	filepath := path
+	cmd := exec.Command("osascript", "-e", fmt.Sprintf("tell application \"Finder\" to set desktop picture to POSIX file \"%s\"", filepath))
+
+	_, err := cmd.Output()
+	if err != nil {
+		println(err.Error())
+		return
+	}
 }

@@ -1,6 +1,10 @@
 <script type="ts">
   import { fade, slide } from "svelte/transition";
   import { imagePathStore } from "../store/app";
+  import CloseIcon from "../assets/images/close.svg";
+  import { SetWallpaper} from "../../wailsjs/go/main/App.js";
+
+
   let path: string = "";
   // export let isShowingModal: boolean;
 
@@ -17,6 +21,13 @@
       closeModal();
     }
   };
+
+  const setAsWallpaper = (imgPath: string) => {
+  console.log(imgPath)
+    SetWallpaper(imgPath).then((res) => {
+      console.log(res)
+    })
+  }
 </script>
 
 <template>
@@ -34,7 +45,12 @@
           on:click|stopPropagation
           on:keydown|stopPropagation
         >
-          <button class="close-btn" on:click={closeModal}>Close</button>
+          <div class="layout">
+            <button class="left-btn" on:click={() => setAsWallpaper(path)}>Set as wallpaper</button>
+            <a href="#" class="close-btn" on:click={closeModal}>
+              <img src={CloseIcon} width="20" /> 
+            </a>
+          </div>
           <img src={path} alt="" width="100%" height="100%" />
           <p></p>
         </div>
@@ -44,6 +60,12 @@
 </template>
 
 <style>
+  .layout {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0px;
+  }
+
   .modal-background {
     position: fixed;
     top: 0;
@@ -70,10 +92,12 @@
   .close-btn {
     background-color: #fff;
     border: none;
+    border-radius: 50%;
     color: white;
-    padding: 0.5rem 1rem;
+    width: 25px;
+    height: 25px;
+    padding: 6px 3px 0px;
     cursor: pointer;
-    border: 1px solid #999;
     color: #999;
   }
 </style>

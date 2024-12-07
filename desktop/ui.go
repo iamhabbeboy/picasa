@@ -42,16 +42,19 @@ func SetMenuItem(ctx context.Context, app *App) *menu.Menu {
 }
 
 func SettingPage(mn *menu.CallbackData) {
-	println("This is setting page")
 	run.EventsOn(context.TODO(), "Hello world", func(optionalData ...interface{}) {
-		println("Hello, world")
 	})
-	//run.MenuSetApplicationMenu(ctx context.Context, menu *menu.Menu)
 }
 
-func AboutPage(mn *menu.CallbackData) {
-	println("This is setting page")
-	run.EventsOn(context.TODO(), "Hello world", func(optionalData ...interface{}) {
-		println("Hello, world")
+func OpenNativeDir(ctx context.Context) (string, error) {
+	return run.OpenDirectoryDialog(ctx, run.OpenDialogOptions{
+		DefaultDirectory: "",
+		Title:            "Select directory",
+		Filters: []run.FileFilter{
+			{
+				DisplayName: "Images (*.png;*.jpg)",
+				Pattern:     "*.png;*.jpg",
+			},
+		},
 	})
 }

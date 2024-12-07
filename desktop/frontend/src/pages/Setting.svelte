@@ -1,5 +1,7 @@
-<script>
+<script lang="ts">
   import Layout from "../components/Layout.svelte";
+
+let imageCategory = $state("")
 </script>
 
 <template>
@@ -16,7 +18,7 @@
         <div class="selection">
           <div>
             <label for="imagepath"> Image Query</label>
-            <input type="text" id="image-query" />
+            <input type="text" id="image-query" bind:value={imageCategory}/>
           </div>
           <div>
             <label for="imagepath"> Total Image </label>
@@ -33,6 +35,8 @@
       <div class="margin-sm">
         <button class="btn"> Save Setting </button>
       </div>
+
+    {imageCategory}
     </div>
   </Layout>
 </template>
@@ -63,14 +67,6 @@
 
   .selection {
     padding: 40px 20px;
-  }
-
-  .btn {
-    padding: 10px;
-    background: #eee;
-    border: 1px solid #999;
-    border-radius: 5px;
-    font-weight: bold;
   }
 
   .selection label {
