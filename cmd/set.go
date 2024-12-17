@@ -5,7 +5,6 @@ package cmd
 
 import (
 	"fmt"
-	"io/ioutil"
 	"main/internal"
 	"main/internal/api"
 	"math/rand"
@@ -24,7 +23,7 @@ var setCmd = &cobra.Command{
 	Short: "Set random wallpaper",
 	Long:  `Set wallpaper`,
 	Run: func(cmd *cobra.Command, args []string) {
-		config := api.NewConfigService()
+		config := &api.ConfigService{}
 		triggerAction(cmd, config)
 	},
 }
@@ -32,9 +31,10 @@ var setCmd = &cobra.Command{
 func triggerAction(cmd *cobra.Command, config *api.ConfigService) {
 	format := "hm"
 	interval := "5m"
+	c, _ := config.GetItem("picasa")
 	value := cmd.Flags().Lookup("interval").Value.String()
 	if value != "" {
-		intervalValueFromConfig := config.Get("config.interval")
+		intervalValueFromConfig := c.Interval //config.Get("config.interval")
 		if intervalValueFromConfig != "" {
 			interval = intervalValueFromConfig
 		} else {
@@ -50,7 +50,8 @@ func triggerAction(cmd *cobra.Command, config *api.ConfigService) {
 		log.Fatal("Interval must be in format in minutes or hours, example: 5m, 1h")
 	}
 
-	config.Set("config.interval", interval)
+	// config.Set("config.interval", interval)
+	config.SetItem("picasa", api.ConfigStorer{Interval: interval})
 
 	res := internal.GetTimeToCrontabFormat(interval)
 
@@ -59,15 +60,16 @@ func triggerAction(cmd *cobra.Command, config *api.ConfigService) {
 		internal.SetCronTab(res, r)
 	}
 
-	p := config.Get("config.image_path")
+	p := c.ImagePath //config.Get("config.image_path")
 	if p == "" {
 		log.Fatal("Picasa: config is broken, please check your config file")
 	}
+	fmt.Println(c)
 
-	if !hasImageDownloaded(p) {
-		HandleDownloadProcess()
-	}
-	setWallpaper(p)
+	// if !hasImageDownloaded(p) {
+	// 	HandleDownloadProcess()
+	// }
+	// setWallpaper(p)
 }
 
 func init() {
@@ -86,7 +88,7 @@ func hasImageDownloaded(p string) bool {
 
 func setWallpaper(path string) {
 	dir := path + "/"
-	f, err := ioutil.ReadDir(dir)
+	f, err := os.ReadDir(dir)
 	if err != nil {
 		log.Fatal(err)
 	}

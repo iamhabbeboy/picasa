@@ -1,11 +1,7 @@
-/*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
 	"fmt"
-	"log"
 	"main/internal"
 	"main/internal/api"
 
@@ -19,35 +15,44 @@ var configCmd = &cobra.Command{
 	Long:  `Update picasa config data.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		interval := cmd.Flags().Lookup("interval").Value.String()
-		accessKey := cmd.Flags().Lookup("access_key").Value.String()
-		secretKey := cmd.Flags().Lookup("secret_key").Value.String()
-		query := cmd.Flags().Lookup("query").Value.String()
-		maxImage := cmd.Flags().Lookup("max_image").Value.String()
+		// accessKey := cmd.Flags().Lookup("access_key").Value.String()
+		// secretKey := cmd.Flags().Lookup("secret_key").Value.String()
+		// query := cmd.Flags().Lookup("query").Value.String()
+		// maxImage := cmd.Flags().Lookup("max_image").Value.String()
 
-		if interval == "" && accessKey == "" && secretKey == "" && query == "" && maxImage == "" {
-			fmt.Println("Picasa: nothing to update")
-			return
-		}
-		config := api.NewConfigService()
+		// if interval == "" && accessKey == "" && secretKey == "" && query == "" && maxImage == "" {
+		// 	fmt.Println("Picasa: nothing to update")
+		// 	return
+		// }
+		c := api.ConfigStorer{}
 		if interval != "" {
-			config.Set("config.interval", interval)
+			c.Interval = interval
+			// if err := config.SetItem("config.interval", interval); err != nil {
+			// 	fmt.Println("Picasa: interval not set")
+			// 	return
 		}
-		if accessKey != "" {
-			config.Set("config.access_key", accessKey)
-		}
-		if secretKey != "" {
-			config.Set("config.secret_key", secretKey)
-		}
-		if query != "" {
-			config.Set("api.query", query)
-		}
-		if maxImage != "" {
-			if internal.HasLetters(maxImage) {
-				log.Fatal("max Image requires a number. e.g 5, 10")
-			}
-			config.Set("config.max_image", maxImage)
-		}
-		fmt.Println("Picasa: config updated successfully")
+		// }
+		// 	if accessKey != "" {
+		// 		config.Set("config.access_key", accessKey)
+		// 	}
+		// 	if secretKey != "" {
+		// 		config.Set("config.secret_key", secretKey)
+		// 	}
+		// 	if query != "" {
+		// 		config.Set("api.query", query)
+		// 	}
+		// 	if maxImage != "" {
+		// 		if internal.HasLetters(maxImage) {
+		// 			log.Fatal("max Image requires a number. e.g 5, 10")
+		// 		}
+		// 		config.Set("config.max_image", maxImage)
+		// 	}
+		// 	fmt.Println("Picasa: config updated successfully")
+		conf := internal.DBConfig
+		conf.SetItem("picasa", c)
+		g, _ := conf.GetItem("picasa")
+		fmt.Println(g)
+		fmt.Println("Done")
 	},
 }
 

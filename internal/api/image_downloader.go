@@ -2,15 +2,15 @@ package api
 
 import "log"
 
-type IimageDownloader interface {
-	GetImages()
+type ImageDownloader interface {
+	GetImages() error
 }
 
-func NewImageDownload(svc string) IimageDownloader {
+func NewImageDownload(svc string) ImageDownloader {
 	if svc == "" {
 		log.Fatal("API Service not found")
 	}
-	app := map[string]IimageDownloader{
+	app := map[string]ImageDownloader{
 		"unsplash": NewUnsplashService(),
 		"pixabay":  NewPixabayService(),
 	}

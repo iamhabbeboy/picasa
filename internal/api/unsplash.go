@@ -27,38 +27,43 @@ type Image struct {
 
 func NewUnsplashService() *UnleaseService {
 	return &UnleaseService{
-		config: NewConfigService(),
+		config: &ConfigService{},
 	}
 }
 
-func (u *UnleaseService) GetImages() {
-	apiUrl := u.config.Get("api.url")
-	query := u.config.Get("api.query")
-	maxImage := u.config.Get("config.max_image")
-	accessKey := u.config.Get("api.access_key")
-	imagePath := u.config.Get("config.image_path")
-
-	url := fmt.Sprintf("%s/photos/random?client_id=%s&count=%s&orientation=landscape&query=%s", apiUrl, accessKey, maxImage, query)
-	fmt.Println(url)
-	result := getImage(url)
-	var wg sync.WaitGroup
-	for key, v := range result {
-		wg.Add(1)
-		go download(v.Urls.Full, key, &wg, imagePath)
-	}
-	wg.Wait()
+func (u *UnleaseService) GetImages() error {
+	c, _ := u.config.GetItem("picasa")
+	// apiUrl := c.APIUrl       //u.config.Get("api.url")
+	// query := c.Query         //u.config.Get("api.query")
+	// maxImage := c.MaxImage   //u.config.Get("config.max_image")
+	// accessKey := c.AccessKey //u.config.Get("api.access_key")
+	// imagePath := c.ImagePath //u.config.Get("config.image_path")
+	fmt.Println(c)
+	// url := fmt.Sprintf("%s/photos/random?client_id=%s&count=%s&orientation=landscape&query=%s", apiUrl, accessKey, maxImage, query)
+	// fmt.Println(url)
+	// result, err := getImage(url)
+	// if err != nil {
+	// 	return err
+	// }
+	// var wg sync.WaitGroup
+	// for key, v := range result {
+	// 	wg.Add(1)
+	// 	go download(v.Urls.Full, key, &wg, imagePath)
+	// }
+	// wg.Wait()
+	return nil
 }
 
-func getImage(url string) []Image {
+func getImage(url string) ([]Image, error) {
 	resp, err := http.Get(url)
 	if err != nil {
-		log.Fatal("Unable to connect to the internet.")
+		return nil, err
 	}
 	var p []Image
 	if err := json.NewDecoder(resp.Body).Decode(&p); err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
-	return p
+	return p, nil
 }
 
 func download(image string, index int, wg *sync.WaitGroup, IMAGE_DIR string) {

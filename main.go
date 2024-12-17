@@ -5,13 +5,18 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"main/cmd"
 	"main/internal"
 	"os"
 )
 
 func main() {
-	go createImageDir()
+	internal.InitPogrebDB()
+	if !createImageDir() {
+		log.Fatal("Error occured while creating directory")
+	}
+
 	cmd.Execute()
 }
 
