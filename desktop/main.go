@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"os/exec"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/logger"
@@ -37,8 +38,28 @@ func (h *FileLoader) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	res.Write(fileData)
 }
 
+func startBackgroundWorker() {
+	// Build the background worker
+	cmd := exec.Command("./worker")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	err := cmd.Start()
+	if err != nil {
+		fmt.Println("Error starting worker:", err)
+		return
+	}
+	err = cmd.Wait()
+	if err != nil {
+		fmt.Println("Worker process finished with error:", err)
+	}
+}
+
 func main() {
 	app := NewApp()
+	go startBackgroundWorker()
+	//cmd := exec.Command("")
+	//r, _ := cmd.Output()
+	//fmt.Println(string(r))
 
 	err := wails.Run(&options.App{
 		Title:         "Picasa Desktop",
@@ -80,6 +101,12 @@ func main() {
 			},
 		},
 	})
+
+	//cmd.SysProcAttr = &syscall.SysProcAttr{
+	// HideWindow:    true,
+	// CreationFlags: 0x08000000,
+	//	}
+	//cmd.Start()
 
 	if err != nil {
 		println("Error:", err.Error())
