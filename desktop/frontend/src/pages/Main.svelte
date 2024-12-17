@@ -56,7 +56,7 @@
 </script>
 
 <template>
-  <div class="image-config border-b flex justify-between">
+  <div class="image-config border-b dark:border-gray-600 flex justify-between">
     <a
       href="#"
       on:click={downloadImages}
