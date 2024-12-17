@@ -6,6 +6,8 @@ import (
 	"os"
 	"os/exec"
 	"path"
+
+	"github.com/labstack/gommon/log"
 )
 
 func GetImagesFromDir() []string {
@@ -33,19 +35,11 @@ func GetImagesFromDir() []string {
 }
 
 func FetchImages(conf api.ImageConfig) {
-	c := api.ImageConfig{}
-
-	if conf.TotalDownloadImage == 0 {
-		c.TotalDownloadImage = 3
-	}
-
-	if conf.Category == "" {
-		c.Category = "nature"
-	}
-
 	svc := api.NewImageDownload("unsplash")
-	svc.GetImages(c)
-	fmt.Println("....Download is complete")
+	err := svc.GetImages(conf)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 }
 
 func WallpaperEvent(path string) {

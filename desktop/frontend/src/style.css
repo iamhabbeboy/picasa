@@ -35,19 +35,19 @@ body {
   text-align: center;
 }
 
-button {
-  padding: 10px 20px;
-  background-color: #007aff;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
+/*button {*/
+/*  padding: 10px 20px;*/
+/*  background-color: #007aff;*/
+/*  color: white;*/
+/*  border: none;*/
+/*  border-radius: 6px;*/
+/*  font-size: 14px;*/
+/*  font-weight: 500;*/
+/*  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);*/
+/*  cursor: pointer;*/
+/*  transition: background-color 0.2s;*/
+/*}*/
 
-button:hover {
-  background-color: #005bb5;
-}
+/*button:hover {*/
+/*  background-color: #005bb5;*/
+/*}*/

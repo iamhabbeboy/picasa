@@ -5,7 +5,7 @@
   import { SetWallpaper} from "../../wailsjs/go/main/App.js";
 
 
-  let path: string = "";
+  let path = "";
   // export let isShowingModal: boolean;
 
   imagePathStore.subscribe((value) => {
@@ -14,6 +14,7 @@
 
   const closeModal = () => {
     imagePathStore.update((value) => (value = ""));
+    return;
   };
 
   const handleKeydown = (event: KeyboardEvent) => {
@@ -23,9 +24,8 @@
   };
 
   const setAsWallpaper = (imgPath: string) => {
-  console.log(imgPath)
     SetWallpaper(imgPath).then((res) => {
-      console.log(res)
+      closeModal()
     })
   }
 </script>
@@ -37,17 +37,17 @@
         class="modal-background"
         on:click={closeModal}
         on:keydown={handleKeydown}
-        transition:fade={{ duration: 300 }}
+        transition:fade|global={{ duration: 300 }}
       >
         <div
-          transition:fade={{ duration: 300 }}
+          transition:fade|global={{ duration: 300 }}
           class="modal"
           on:click|stopPropagation
           on:keydown|stopPropagation
         >
           <div class="layout">
-            <button class="left-btn" on:click={() => setAsWallpaper(path)}>Set as wallpaper</button>
-            <a href="#" class="close-btn" on:click={closeModal}>
+            <button class=" p-2 text-sm underline bg-transparent text-gray-900 hover:text-gray-600" on:click={() => setAsWallpaper(path)}>Set as wallpaper</button>
+            <a href="#" class="close-btn" on:click|preventDefault={closeModal}>
               <img src={CloseIcon} width="20" /> 
             </a>
           </div>
@@ -84,7 +84,7 @@
     background-color: rgba(255, 255, 255, 0.7);
     padding: 0.9rem;
     border-radius: 8px;
-    width: 700px;
+    width: 850px;
     max-width: 100%;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   }
@@ -96,7 +96,7 @@
     color: white;
     width: 25px;
     height: 25px;
-    padding: 6px 3px 0px;
+    padding: 4px 3px 0px;
     cursor: pointer;
     color: #999;
   }

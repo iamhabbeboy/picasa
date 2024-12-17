@@ -18,6 +18,7 @@ type AppConf struct {
 	Name        string `mapstructure:"name"`
 	Version     string `mapstructure:"version"`
 	DefaultPath string `mapstructure:"default_path"`
+	Interval    string `mapstructure:"interval"`
 }
 
 type Image struct {
@@ -66,15 +67,6 @@ func (a *AppConfig) Get(key string) (interface{}, error) {
 		return nil, nil
 	}
 	r := viper.Get(key)
-	/*var config AppConfig
-	err := viper.Unmarshal(&config)
-	if err != nil {
-		log.Fatalf("Error unmarshalling config: %v", err)
-
-		return AppConfig{}, errors.New(fmt.Sprintf("Error unmarshalling config: %v", err))
-	}
-	return config, nil
-	*/
 	return r, nil
 }
 
@@ -84,7 +76,6 @@ func (a *AppConfig) Set(key string, value interface{}) {
 	if err != nil {
 		log.Fatalf("Error writing to config file: %v", err)
 	}
-	fmt.Printf("Set '%s' to '%v'\n", key, value)
 }
 
 func (a *AppConfig) delete(key string) {

@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strconv"
 	"sync"
 
 	log "github.com/sirupsen/logrus"
@@ -42,15 +43,17 @@ func (u *UnleaseService) GetImages(imgConf ImageConfig) error {
 	// access_key: Nw5jS2P4zr_oO_qbFt_39zyj7QTIMI49vYx5lCzxujY
 	// api_key: pseMeAYqR4G1I8cx8vbwkm4HTs1o56NzW6ZiKGHCMNs
 	// url: https://api.unsplash.com
-	apiUrl := "https://api.unsplash.com"                       //c.APIUrl                     //u.config.Get("api.url")
-	query := imgConf.Category                                  //u.config.Get("api.query")
-	maxImage := "3"                                            //imgConf.TotalDownloadImage                     //u.config.Get("config.max_image")
-	accessKey := "Nw5jS2P4zr_oO_qbFt_39zyj7QTIMI49vYx5lCzxujY" //:= c.AccessKey               //u.config.Get("api.access_key")
-
+	apiUrl := "https://api.unsplash.com" //c.APIUrl                     //u.config.Get("api.url")
+	query := imgConf.Category            //u.config.Get("api.query")
+	imgCount := imgConf.TotalDownloadImage
+	maxImage := strconv.Itoa(imgCount)
+	accessKey := "Nw5jS2P4zr_oO_qbFt_39zyj7QTIMI49vYx5lCzxujY"
+	fmt.Println(maxImage, " is here")
 	home, _ := os.UserHomeDir()
-	fp := fmt.Sprintf("%s/.picasa/", home)
+	fp := fmt.Sprintf("%s/.picasa/images/", home)
 	imagePath := fp
 	url := fmt.Sprintf("%s/photos/random?client_id=%s&count=%s&orientation=landscape&query=%s", apiUrl, accessKey, maxImage, query)
+	fmt.Println("Download...")
 	fmt.Println(url)
 
 	result, err := getImage(url)

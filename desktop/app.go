@@ -6,6 +6,9 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	// "strconv"
+
+	// "strconv"
 	"strings"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
@@ -15,6 +18,12 @@ import (
 type App struct {
 	ctx     context.Context
 	appConf *AppConfig
+}
+
+type Conf struct {
+	ImageCategory string
+	TotalImage    int
+	Interval      string
 }
 
 const APP_NAME = ".picasa"
@@ -113,6 +122,24 @@ func (a *App) DownloadImages(conf api.ImageConfig) {
 
 func (a *App) SetWallpaper(path string) {
 	WallpaperEvent(path)
+}
+
+func (a *App) GetConfig() Conf {
+	imgCat, _ := a.appConf.Get("api.image_category")
+	totalImg, _ := a.appConf.Get("api.download_limit")
+	intvl, _ := a.appConf.Get("api.interval")
+
+	c := Conf{
+		ImageCategory: imgCat.(string),
+		TotalImage:    totalImg.(int),
+		Interval:      intvl.(string),
+	}
+	return c
+}
+
+func (a *App) SetConfig(conf Conf) {
+	a.appConf.Set("api.image_category", conf.ImageCategory)
+	a.appConf.Set("api.download_limit", conf.TotalImage)
 }
 
 // https://gist.github.com/stupidbodo/0db61fa874213a31dc57 - replacement for cronjob

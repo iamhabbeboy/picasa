@@ -8,8 +8,8 @@
 
 <template>
   <div>
-    <div class="nav-link">
-      <a class="default-link" href={""} use:link={defaultLink}>
+    <div class="mt-0 p-10 text-left">
+      <a class="no-underline pl-3 text-gray-600 dark:text-white flex" href={""} use:link={defaultLink}>
         <IconifyIcon
           icon="bi:arrow-left"
           style="position: relative; top: 3px;padding-right: 5px;"
@@ -21,12 +21,6 @@
 </template>
 
 <style>
-  .default-link {
-    color: #333;
-    text-decoration: none;
-    padding-left: 30px;
-  }
-
   .nav-link {
     margin-top: 30px;
     padding: 20px;
