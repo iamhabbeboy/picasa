@@ -2,10 +2,12 @@ package main
 
 import (
 	"context"
+	"desktop/internal"
 	"desktop/internal/api"
 	"fmt"
 	"os"
 	"path/filepath"
+
 	// "strconv"
 
 	// "strconv"
@@ -17,13 +19,14 @@ import (
 // App struct
 type App struct {
 	ctx     context.Context
-	appConf *AppConfig
+	appConf *internal.AppConfig
 }
 
 type Conf struct {
 	ImageCategory string
 	TotalImage    int
 	Interval      string
+	DefaultPath   string
 }
 
 const APP_NAME = ".picasa"
@@ -117,22 +120,24 @@ func isImageFile(file string) bool {
 }
 
 func (a *App) DownloadImages(conf api.ImageConfig) {
-	FetchImages(conf)
+	internal.FetchImages(conf)
 }
 
 func (a *App) SetWallpaper(path string) {
-	WallpaperEvent(path)
+	internal.WallpaperEvent(path)
 }
 
 func (a *App) GetConfig() Conf {
 	imgCat, _ := a.appConf.Get("api.image_category")
 	totalImg, _ := a.appConf.Get("api.download_limit")
 	intvl, _ := a.appConf.Get("api.interval")
+	dp, _ := a.appConf.Get("image.selected_abs_path")
 
 	c := Conf{
 		ImageCategory: imgCat.(string),
 		TotalImage:    totalImg.(int),
 		Interval:      intvl.(string),
+		DefaultPath:   dp.(string),
 	}
 	return c
 }

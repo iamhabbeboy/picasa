@@ -2,9 +2,9 @@ package internal
 
 import (
 	"bytes"
+	"desktop/internal/api"
 	"fmt"
 	"log"
-	"main/internal/api"
 	"os/exec"
 	"os/user"
 	"regexp"

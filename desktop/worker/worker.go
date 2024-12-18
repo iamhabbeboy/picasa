@@ -1,21 +1,28 @@
 package main
 
 import (
+	"desktop/internal"
 	"fmt"
-	"time"
 )
 
 var (
 	INTERVAL_SEC = 10
 )
 
+// type App struct {
+// 	appConf *AppConfig
+// }
+
+// Get the config interval duration
+// Get the images path
+// Set the desktop wallpaper
 func main() {
-	t := time.NewTicker(time.Duration(INTERVAL_SEC) * time.Second)
-	for _ = range t.C {
-		fmt.Println("PrintRoutine1")
-	}
-	/*for {
-		fmt.Println("Main program is running...")
-		time.Sleep(3 * time.Second)
-	}*/
+	conf := internal.AppConfig{}
+	r, _ := conf.Get("app.default_path")
+	fmt.Println(r)
+
+	// t := time.NewTicker(time.Duration(INTERVAL_SEC) * time.Second)
+	// for v := range t.C {
+	// 	fmt.Printf("%v value here", v)
+	// }
 }

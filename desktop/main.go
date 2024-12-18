@@ -56,10 +56,7 @@ func startBackgroundWorker() {
 
 func main() {
 	app := NewApp()
-	go startBackgroundWorker()
-	//cmd := exec.Command("")
-	//r, _ := cmd.Output()
-	//fmt.Println(string(r))
+	// go startBackgroundWorker()
 
 	err := wails.Run(&options.App{
 		Title:         "Picasa Desktop",
