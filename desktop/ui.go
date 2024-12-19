@@ -58,3 +58,25 @@ func OpenNativeDir(ctx context.Context) (string, error) {
 		},
 	})
 }
+
+func OpenNativeSingleDir(ctx context.Context) (string, error) {
+	return run.OpenDirectoryDialog(ctx, run.OpenDialogOptions{
+		DefaultDirectory: "",
+		Title:            "Select directory",
+		// Filters: []run.FileFilter{
+		// 	{
+		// 		DisplayName: "Images (*.png;*.jpg)",
+		// 		Pattern:     "*.png;*.jpg",
+		// 	},
+		// },
+	})
+}
+
+func MessageBox(ctx context.Context, msg string) (string, error) {
+	return run.MessageDialog(ctx, run.MessageDialogOptions{
+		Title:   "",
+		Message: msg,
+		Icon:    nil,
+		Buttons: []string{"Ok"},
+	})
+}

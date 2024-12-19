@@ -74,6 +74,7 @@ func (a *App) SelectImageDir() []string {
 	dir, err := OpenNativeDir(a.ctx)
 	if err != nil {
 		println(err.Error())
+		return []string{""}
 	}
 
 	// store the path selected.
@@ -83,6 +84,7 @@ func (a *App) SelectImageDir() []string {
 
 	if err != nil {
 		println(err)
+		return []string{""}
 	}
 
 	return imgs
@@ -145,6 +147,20 @@ func (a *App) GetConfig() Conf {
 func (a *App) SetConfig(conf Conf) {
 	a.appConf.Set("api.image_category", conf.ImageCategory)
 	a.appConf.Set("api.download_limit", conf.TotalImage)
+	a.appConf.Set("image.selected_abs_path", conf.DefaultPath)
+}
+
+func (a *App) OpenDirDialogWindow() string {
+	dir, err := OpenNativeDir(a.ctx)
+	if err != nil {
+		println(err.Error())
+		return ""
+	}
+	return dir
+}
+
+func (a *App) MessageDialog(m string) (string, error) {
+	return MessageBox(a.ctx, m)
 }
 
 // https://gist.github.com/stupidbodo/0db61fa874213a31dc57 - replacement for cronjob

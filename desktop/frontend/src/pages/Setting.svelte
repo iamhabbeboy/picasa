@@ -3,7 +3,9 @@
   import {
     DownloadImages,
     GetConfig,
-    SetConfig
+    SetConfig,
+    OpenDirDialogWindow,
+    MessageDialog
   } from "../../wailsjs/go/main/App.js";
 
  import { onMount } from "svelte";
@@ -17,14 +19,15 @@ let message = ""
 let defaultPath = ""
 
 
-function handleSaveSetting() {
+async function handleSaveSetting() {
   if(imageCategory === "" || totalImageCount === "" || imageInterval === "") {
     return;
   }
 
   const conf = {
     ImageCategory: imageCategory,
-    TotalImage: Number(totalImageCount)
+    TotalImage: Number(totalImageCount),
+    DefaultPath: defaultPath 
   }
 
   /*DownloadImages(conf).then((res) => {
@@ -32,7 +35,12 @@ function handleSaveSetting() {
   })*/
 
   SetConfig(conf)
-  message = "Config updated successfully"
+  try {
+    const msg = await MessageDialog("Config updated successfully")
+  } catch(e) {
+    const error = e instanceof Error ? e.message: "Unknown error"
+    message = error
+  }
 }
 
 onMount(async () => {
@@ -43,26 +51,32 @@ onMount(async () => {
   defaultPath = conf.DefaultPath
 })
 
+const handleSelectFolder = async () => {
+  const path = await  OpenDirDialogWindow() 
+  defaultPath = path
+  //isFolderSelected = true;
+}
+
 </script>
 
 <template>
   <Layout>
     <h1 class="font-bold text-gray-600 dark:text-white">Configuration</h1>
     <div class="layout">
-      <div class="text-[#999] border border-gray-200 dark:border-gray-500 rounded-md">
+      <!-- <div class="text-[#999] border border-gray-200 dark:border-gray-500 rounded-md">
         <div class="selection">
           <h3 class="my-5"> Select image folder </h3>
         <button class="text-gray-100 py-2 px-5 mb-3 rounded-md bg-gray-500"> Click to open</button>
         </div>
-      </div>
+      </div> -->
 
       <div class="mt-4 text-[#999] border border-gray-200 dark:border-gray-500 rounded-md
 ">
         <!-- <h3 class="text-gray-600 dark:text-white font-bold mt-2"> Online images config </h3>-->
         <div class="selection">
           <div> 
-            <label for="imagepath"> Default path: <p class="italic">{defaultPath}</p></label>
-            <button class="text-gray-100 py-2 px-5 mb-3 rounded-md bg-gray-500" > Change folder</button>
+            <label for="imagepath">Image path <p class="italic">{defaultPath}</p></label>
+            <button class="text-gray-100 py-2 px-5 mb-3 rounded-md bg-gray-500" on:click={handleSelectFolder}> Change folder</button>
           </div>
 
           <div> 
@@ -80,10 +94,9 @@ onMount(async () => {
           </div>
 
           <div class="mt-5">
-            <button class="text-gray-100 py-2 px-10 mb-3 rounded-md bg-gray-500" on:click={handleSaveSetting}> Save Setting </button>
-            {#if message !== ""}
-              <p class=""> Configuration saved </p>
-            {/if}
+            <button class="text-gray-100 py-2 px-10 mb-3 rounded-md bg-gray-500" on:click={handleSaveSetting}> Save </button>
+
+            <button class="text-gray-100 py-2 px-10 mb-3 rounded-md bg-gray-500" on:click={handleSaveSetting}> Restore config </button>
           </div>
         </div>
        </div>
