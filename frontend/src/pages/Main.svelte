@@ -11,7 +11,6 @@
   import { imagePathStore } from "../store/app";
   import { onMount } from "svelte";
   import ImageConfig from "../components/ImageConfig.svelte";
-  import loaderImage from "../../src/assets/images/loader.svg";
   import DownloadImage from "../../src/assets/images/download.svg";
   import ConfigImage from "../../src/assets/images/config.svg";
 

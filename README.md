@@ -1,60 +1,16 @@
-# Picasa for Unix
+# README
 
-Introducing the Random Wallpaper Tool for Mac OSX and Linux *(coming soon)*
+## About
 
-Are you tired of staring at the same wallpaper on your Mac every day? Do you want to add some variety and spice up your desktop? Look no further than Random Wallpaper!
+This is the official Wails Svelte-TS template.
 
-A simple CLI tool that downloads random pictures from [unsplash](unsplash.com/) and use it as a wallpaper. 
+## Live Development
 
-> NB: The random change of the wallpaper rely solely on cronjob, which means the tool will request access to edit your crontab.
+To run in live development mode, run `wails dev` in the project directory. This will run a Vite development
+server that will provide very fast hot reload of your frontend changes. If you want to develop in a browser
+and have access to your Go methods, there is also a dev server that runs on http://localhost:34115. Connect
+to this in your browser, and you can call your Go code from devtools.
 
-Download release and copy to `/usr/local/bin/` folder so it can be available globally using
+## Building
 
-```
- > cp picasa /usr/local/bin
-```
-
-```
-> picasa -h
-```
-
-```
-> picasa set interval 5m
-```
-
-```
- > picasa set -i 24h
-```
-
-- 5m - 5 minutes
-- 10m - 10 minutes
-- 60m - 60 minutes
-- 1h  - 1 hour
-- 1d - 1 day
-
-### Configuration
-Due to unsplash policy, the secret key used for this project might stop working at some point, to configure yours; Just head to unsplash and create an app, get the secret key and access point.
-```
-> picasa config -h
-```
-
-```
-> picasa config --access_token xklkejwerlkjk --secret_key lwkejrklwjerlkjwelkrj
-```
-
-Change image query
-The default image query type is `nature` which means that you only get nature related images, but you can decide to change the image query with:
-```
-> picasa config -q water
-```
-
-Change max image download 
-```
-> picasa config --max_image 20
-```
-
-Change image change interval
-```
-> picasa config --interval 24h
-```
-You will only see the effect after the cronjob execute to download next set of images.
+To build a redistributable, production mode package, use `wails build`.
