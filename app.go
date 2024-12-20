@@ -7,10 +7,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-
-	// "strconv"
-
-	// "strconv"
 	"strings"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
@@ -46,22 +42,17 @@ func (a *App) startup(ctx context.Context) {
 }
 
 func (a *App) GetDownloadedImages() []string {
-	selectedPath, err := a.appConf.Get("app.default_path")
+	selectedPath, err := a.appConf.Get("image.selected_abs_path")
 
 	if err != nil {
 		println(err)
 	}
-	var path string
-	if selectedPath.(string) == "" {
-		defaultPath, _ := a.appConf.Get("image.selected_abs_path")
-		path = defaultPath.(string)
-	} else {
-		path = selectedPath.(string)
+	path := selectedPath.(string)
+	var fp string = path
+	if strings.Contains(path, "picasa") {
+		home, _ := os.UserHomeDir()
+		fp = fmt.Sprintf("%s/%s", home, path)
 	}
-
-	home, _ := os.UserHomeDir()
-	fp := fmt.Sprintf("%s/%s", home, path)
-
 	img, err := a.GetAllFilesInDir(fp)
 	if err != nil {
 		println(err.Error())
@@ -97,7 +88,7 @@ func (a *App) GetAllFilesInDir(dir string) ([]string, error) {
 			return err
 		}
 
-		if !info.IsDir() {
+		if !info.IsDir() && isImageFile(path) {
 			if isImageFile(info.Name()) {
 				images = append(images, path)
 			}
@@ -164,3 +155,4 @@ func (a *App) MessageDialog(m string) (string, error) {
 }
 
 // https://gist.github.com/stupidbodo/0db61fa874213a31dc57 - replacement for cronjob
+// https://gist.github.com/harubaru/f727cedacae336d1f7877c4bbe2196e1#model-overview

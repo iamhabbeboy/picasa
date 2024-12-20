@@ -35,9 +35,9 @@ type Api struct {
 func (a *AppConfig) Init() {
 	viper.SetDefault("app.name", "Picasa Desktop")
 	viper.SetDefault("app.version", "0.1.0")
-	viper.SetDefault("app.default_path", "~/.picasa/")
+	// viper.SetDefault("app.default_path", "~/.picasa/")
 
-	viper.SetDefault("image.selected_abs_path", "")
+	viper.SetDefault("image.selected_abs_path", "/.picasa/images")
 	viper.SetDefault("image.last_downloads", "")
 
 	viper.SetDefault("api.download_limit", 10)

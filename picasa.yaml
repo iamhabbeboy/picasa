@@ -9,9 +9,8 @@ api:
         api_key: pseMeAYqR4G1I8cx8vbwkm4HTs1o56NzW6ZiKGHCMNs
         url: https://api.unsplash.com
 app:
-    default_path: .picasa/
     name: Picasa Desktop
     version: 0.1.0
 image:
     last_downloads: ""
-    selected_abs_path: ./picasa/images
+    selected_abs_path: /Users/solomon/Downloads/images
