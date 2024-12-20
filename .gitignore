@@ -8,3 +8,4 @@ frontend/node_modules
 frontend/.svelte-kit
 frontend/.vscode
 /build
+picasa.yaml
