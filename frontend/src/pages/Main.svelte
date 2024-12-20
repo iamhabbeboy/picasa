@@ -14,6 +14,8 @@
   import DownloadImage from "../../src/assets/images/download.svg";
   import ConfigImage from "../../src/assets/images/config.svg";
 
+  import LoaderImage from "../../src/assets/images/loader.svg";
+
   let images: string[] = [];
   let path: string;
   let isFolderSelected: boolean = false;
@@ -45,8 +47,8 @@
 
   onMount(async () => {
     const result = await GetDownloadedImages();
-    images = result;
-    isLoading = !!result;
+    images = result ?? [];
+    isLoading = false;
 
     rpc.on("shortcut.page.setting", () => {
       replace("/setting");
@@ -82,30 +84,35 @@
     </a>
   </div>
   <section class=" w-[95%] mx-auto mt-3">
-    <div class="flex flex-wrap justify-between">
-      {#each images as image}
-        <div
-          class="bg-gray-800 w-[300px] h-[300px] mb-3 cursor-pointer"
-          on:click={() => dispatcher(image)}
-          on:keydown={() => dispatcher(image)}
-        >
-          <img src={image.toString()} alt="" class="object-cover h-[100%]" />
-          <!--<div class="caption">
+    {#if isLoading}
+      <div class="mx-auto w-48 h-screen flex justify-center items-center">
+        <img src={LoaderImage} alt="" />
+        <h4>Loading...</h4>
+      </div>
+    {:else}
+      <div class="flex flex-wrap justify-between">
+        {#each images as image}
+          <div
+            class="bg-gray-800 w-[300px] h-[300px] mb-3 cursor-pointer"
+            on:click={() => dispatcher(image)}
+            on:keydown={() => dispatcher(image)}
+          >
+            <img
+              src={image.toString()}
+              alt=""
+              class="object-cover h-[100%] w-[100%]"
+            />
+            <!--<div class="caption">
             credit: <button on:click={() => openCreditUrl("name")}
               >Abbey photo</button
             >
           </div>-->
-        </div>
-      {/each}
-    </div>
+          </div>
+        {/each}
+      </div>
+    {/if}
     <Modal />
   </section>
-
-  <!-- {#if isLoading}
-    <div class="mx-auto w-48">
-      <img src={loaderImage} />
-    </div>
-  {/if} -->
 
   {#if images.length === 0}
     <ImageConfig on:click={handleOpenSelectFolder} />
@@ -113,7 +120,6 @@
 </template>
 
 <style>
-
   .image-config {
     padding: 10px;
     text-align: left;

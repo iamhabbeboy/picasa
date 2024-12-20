@@ -2,11 +2,9 @@
   import { fade, slide } from "svelte/transition";
   import { imagePathStore } from "../store/app";
   import CloseIcon from "../assets/images/close.svg";
-  import { SetWallpaper} from "../../wailsjs/go/main/App.js";
-
+  import { SetWallpaper } from "../../wailsjs/go/main/App.js";
 
   let path = "";
-  // export let isShowingModal: boolean;
 
   imagePathStore.subscribe((value) => {
     path = value;
@@ -25,9 +23,9 @@
 
   const setAsWallpaper = (imgPath: string) => {
     SetWallpaper(imgPath).then((res) => {
-      closeModal()
-    })
-  }
+      closeModal();
+    });
+  };
 </script>
 
 <template>
@@ -46,12 +44,31 @@
           on:keydown|stopPropagation
         >
           <div class="layout">
-            <button class=" p-2 text-sm underline bg-transparent text-gray-900 hover:text-gray-600" on:click={() => setAsWallpaper(path)}>Set as wallpaper</button>
+            <button
+              class=" p-2 text-sm underline bg-transparent text-gray-900 hover:text-gray-600"
+              on:click={() => setAsWallpaper(path)}>Set as wallpaper</button
+            >
             <a href="#" class="close-btn" on:click|preventDefault={closeModal}>
-              <img src={CloseIcon} width="20" /> 
+              <img src={CloseIcon} width="20" alt="close icon" />
             </a>
           </div>
-          <img src={path} alt="" width="100%" height="100%" />
+          <div class="align-left text-gray-700 text-xs py-2">
+            <span class="mr-3">Credit: <a href="/">Unsplash</a></span> /
+            <span class="ml-3"
+              >Author: <a href="/" class="underline hover:no-underline"
+                >Abbey web</a
+              ></span
+            >
+          </div>
+          <div class="overflow-hidden w-[800px] h-[600px] mx-auto">
+            <img
+              src={path}
+              alt=""
+              width="100%"
+              height="100%"
+              class="w-full h-full object-cover"
+            />
+          </div>
           <p></p>
         </div>
       </div>

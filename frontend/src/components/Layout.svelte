@@ -9,7 +9,11 @@
 <template>
   <div>
     <div class="mt-0 p-10 text-left">
-      <a class="no-underline pl-3 text-gray-600 dark:text-white flex" href={""} use:link={defaultLink}>
+      <a
+        class="no-underline pl-3 text-gray-600 dark:text-white flex"
+        href={""}
+        use:link={defaultLink}
+      >
         <IconifyIcon
           icon="bi:arrow-left"
           style="position: relative; top: 3px;padding-right: 5px;"
