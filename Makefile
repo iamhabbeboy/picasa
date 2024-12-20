@@ -26,3 +26,7 @@ run:
 clean:
 	@echo "Cleaning up build artifacts..."
 	rm -f $(WORKER_PATH)
+
+lint:
+	@echo "Linting..."
+	golangci-lint run
