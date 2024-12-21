@@ -38,9 +38,8 @@ func (h *FileLoader) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	res.Write(fileData)
 }
 
-func startBackgroundWorker() {
-	// Build the background worker
-	cmd := exec.Command("./worker")
+func startSchedulerWorker() {
+	cmd := exec.Command("./worker/picasa_worker")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err := cmd.Start()
@@ -48,15 +47,18 @@ func startBackgroundWorker() {
 		fmt.Println("Error starting worker:", err)
 		return
 	}
+
 	err = cmd.Wait()
 	if err != nil {
 		fmt.Println("Worker process finished with error:", err)
 	}
+
+	fmt.Printf("[Main App] Scheduler started with PID: %d\n", cmd.Process.Pid)
 }
 
 func main() {
+
 	app := NewApp()
-	// go startBackgroundWorker()
 
 	err := wails.Run(&options.App{
 		Title:         "Picasa Desktop",
@@ -99,13 +101,8 @@ func main() {
 		},
 	})
 
-	//cmd.SysProcAttr = &syscall.SysProcAttr{
-	// HideWindow:    true,
-	// CreationFlags: 0x08000000,
-	//	}
-	//cmd.Start()
-
 	if err != nil {
-		println("Error:", err.Error())
+		fmt.Printf("[Main] Error starting Wails app: %v\n", err)
+		os.Exit(1)
 	}
 }
