@@ -40,7 +40,7 @@ func (h *FileLoader) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 
 func startBackgroundWorker() {
 	// Build the background worker
-	cmd := exec.Command("./worker")
+	cmd := exec.Command("./worker/picasa_worker")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err := cmd.Start()
@@ -56,7 +56,7 @@ func startBackgroundWorker() {
 
 func main() {
 	app := NewApp()
-	// go startBackgroundWorker()
+	go startBackgroundWorker()
 
 	err := wails.Run(&options.App{
 		Title:         "Picasa Desktop",

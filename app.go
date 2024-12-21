@@ -6,7 +6,6 @@ import (
 	"desktop/internal/api"
 	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
@@ -53,7 +52,7 @@ func (a *App) GetDownloadedImages() []string {
 		home, _ := os.UserHomeDir()
 		fp = fmt.Sprintf("%s/%s", home, path)
 	}
-	img, err := a.GetAllFilesInDir(fp)
+	img, err := internal.GetAllFilesInDir(fp)
 	if err != nil {
 		println(err.Error())
 	}
@@ -71,7 +70,7 @@ func (a *App) SelectImageDir() []string {
 	// store the path selected.
 	a.appConf.Set("image.selected_abs_path", dir)
 
-	imgs, err := a.GetAllFilesInDir(dir)
+	imgs, err := internal.GetAllFilesInDir(dir)
 
 	if err != nil {
 		println(err)
@@ -79,37 +78,6 @@ func (a *App) SelectImageDir() []string {
 	}
 
 	return imgs
-}
-
-func (a *App) GetAllFilesInDir(dir string) ([]string, error) {
-	var images []string
-	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-
-		if !info.IsDir() && isImageFile(path) {
-			if isImageFile(info.Name()) {
-				images = append(images, path)
-			}
-		}
-		return nil
-	})
-
-	if err != nil {
-		return nil, err
-	}
-	return images, nil
-}
-
-func isImageFile(file string) bool {
-	extn := []string{".jpg", ".jpeg", ".png"}
-	for _, ext := range extn {
-		if strings.HasSuffix(strings.ToLower(file), ext) {
-			return true
-		}
-	}
-	return false
 }
 
 func (a *App) DownloadImages(conf api.ImageConfig) {

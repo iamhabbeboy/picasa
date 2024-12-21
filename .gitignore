@@ -10,3 +10,5 @@ frontend/.vscode
 /build
 picasa.yaml
 frontend/dist
+desktop
+worker/picasa_worker
