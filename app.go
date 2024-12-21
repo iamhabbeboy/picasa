@@ -91,15 +91,42 @@ func (a *App) SetWallpaper(path string) {
 func (a *App) GetConfig() Conf {
 	imgCat, _ := a.appConf.Get("api.image_category")
 	totalImg, _ := a.appConf.Get("api.download_limit")
-	intvl, _ := a.appConf.Get("api.interval")
+	intvl, _ := a.appConf.Get("image.interval")
 	dp, _ := a.appConf.Get("image.selected_abs_path")
 
-	c := Conf{
-		ImageCategory: imgCat.(string),
-		TotalImage:    totalImg.(int),
-		Interval:      intvl.(string),
-		DefaultPath:   dp.(string),
+	var img, intv, d string
+	var tot int
+	if imgCat == nil {
+		img = ""
+	} else {
+		img = imgCat.(string)
 	}
+
+	if totalImg == nil {
+		tot = 0
+	} else {
+		tot = totalImg.(int)
+	}
+
+	if intvl == nil {
+		intv = ""
+	} else {
+		intv = intvl.(string)
+	}
+
+	if dp == nil {
+		d = ""
+	} else {
+		d = dp.(string)
+	}
+
+	c := Conf{
+		ImageCategory: img,
+		TotalImage:    tot,
+		Interval:      intv,
+		DefaultPath:   d,
+	}
+
 	return c
 }
 
@@ -107,6 +134,7 @@ func (a *App) SetConfig(conf Conf) {
 	a.appConf.Set("api.image_category", conf.ImageCategory)
 	a.appConf.Set("api.download_limit", conf.TotalImage)
 	a.appConf.Set("image.selected_abs_path", conf.DefaultPath)
+	a.appConf.Set("image.interval", conf.Interval)
 }
 
 func (a *App) OpenDirDialogWindow() string {

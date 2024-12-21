@@ -3,6 +3,7 @@ package main
 import (
 	"desktop/internal"
 	"fmt"
+	"log"
 	"math/rand"
 	"os"
 	"strconv"
@@ -25,45 +26,52 @@ func main() {
 	var tmx time.Duration
 
 	if cint == nil {
-		tmx = 30 * time.Minute
+		tmx = 10 * time.Minute
 	} else {
-
 		tm := cint.(string)
-		var seq, dur string
+
+		var seq rune
+		var dur []rune
 
 		rtm := []rune(tm)
-		fmt.Println(rtm)
-		// if tm != "" {
-		// 	seq = rtm[len(rtm)-1]
-		// 	dur = rtm[:len(tm)-1]
-		// }
-		//
-		// var tdur time.Duration
-		// if seq == "m" {
-		// 	tdur = time.Minute
-		// } else if seq == "s" {
-		// 	tdur = time.Second
-		// } else if seq == "h" {
-		// 	tdur = time.Hour
-		// }
-		//
-		// c, _ := strconv.Atoi(seq)
-		// fmt.Println("this is the current time interval ", c)
-		// tmx = 30 * tdur
+
+		if tm != "" {
+			indx := len(rtm) - 1
+			seq = rtm[indx]
+			dur = rtm[:indx]
+		}
+
+		cs := string(seq)
+		var t time.Duration
+
+		if cs == "m" {
+			t = time.Minute
+		} else if cs == "s" {
+			t = time.Second
+		} else if cs == "h" {
+			t = time.Hour
+		}
+
+		idur := string(dur)
+		n, _ := strconv.Atoi(idur)
+
+		tmx = time.Duration(n) * t
 	}
-	// stopChan := make(chan bool)
+
+	//tf := 30 * time.Second
+
 	deskw := time.NewTicker(tmx)
 	// down := time.NewTicker(7 * 24 * time.Hour)
 	//
 	defer deskw.Stop()
 	// defer down.Stop()
-	//
+
 	// quit := make(chan struct{})
-	//
+
 	for {
 		select {
 		case <-deskw.C:
-			scheduleSetDesktopWallpaper(conf)
+			scheduleSetDesktopWallpaper(conf, tmx)
 			// 	// case <-down.C:
 			// 	// scheduleDownloadImages()
 			// case <-stopChan:
@@ -79,15 +87,19 @@ func main() {
 
 func scheduleDownloadImages() error {
 	// dir := conf
-	//
 	return nil
 }
 
-func scheduleSetDesktopWallpaper(conf *internal.AppConfig) error {
+func scheduleSetDesktopWallpaper(conf *internal.AppConfig, t time.Duration) error {
 	cnf, _ := conf.Get("image.selected_abs_path")
+	if cnf == nil {
+		log.Fatal("Image directory not set")
+	}
 	fp := cnf.(string)
+
+	fmt.Println(t)
+	fmt.Println(fp)
 	imgs := getImages(fp)
-	fmt.Println(len(imgs))
 
 	random := rand.Intn(len(imgs))
 	f := imgs[random]

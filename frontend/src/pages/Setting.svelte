@@ -20,11 +20,7 @@
   let apikey = "xksdflksjdf";
 
   async function handleSaveSetting() {
-    if (
-      imageCategory === "" ||
-      totalImageCount === "" ||
-      imageInterval === ""
-    ) {
+    if (imageCategory === "" || totalImageCount === 0 || imageInterval === "") {
       return;
     }
 
