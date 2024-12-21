@@ -37,7 +37,9 @@ func GetImagesFromDir() []string {
 }
 
 func FetchImages(conf api.ImageConfig) {
-	svc := api.NewImageDownload("unsplash")
+	apikey := conf.Apikey
+	sp := conf.Path
+	svc := api.NewImageDownload("unsplash", sp, apikey)
 	err := svc.GetImages(conf)
 	if err != nil {
 		log.Fatal(err.Error())

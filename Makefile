@@ -1,7 +1,7 @@
 # Makefile
-WORKER=worker/worker.go
-WORKER_BIN=picasa_worker
-WORKER_PATH=worker/picasa_worker
+WORKER=scheduler/runner.go
+WORKER_BIN=picasa_scheduler
+WORKER_PATH=scheduler/picasa_scheduler
 
 build-worker:
 	@echo "Building worker..."

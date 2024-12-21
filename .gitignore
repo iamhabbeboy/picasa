@@ -11,4 +11,4 @@ frontend/.vscode
 picasa.yaml
 frontend/dist
 desktop
-worker/picasa_worker
+scheduler/picasa_scheduler
