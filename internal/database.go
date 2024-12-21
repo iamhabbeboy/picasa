@@ -32,20 +32,27 @@ type Api struct {
 	SourceApis    []string `mapstructure:"source_apis"`
 }
 
-func (a *AppConfig) Init() {
+func (a *AppConfig) Init(sp string) {
 	viper.SetDefault("app.name", "Picasa Desktop")
 	viper.SetDefault("app.version", "0.1.0")
 	// viper.SetDefault("app.default_path", "~/.picasa/")
 
-	viper.SetDefault("image.selected_abs_path", "/.picasa/images")
+	viper.SetDefault("image.selected_abs_path", ".picasa/images")
 	viper.SetDefault("image.last_downloads", "")
+	viper.SetDefault("image.interval", "10m")
 
 	viper.SetDefault("api.download_limit", 10)
+	viper.SetDefault("api.download_interval", "1w")
 	viper.SetDefault("api.image_category", "country")
 	viper.SetDefault("api.source_apis", []string{"unsplash"})
 
+	var fp string = "."
+	if sp != "" {
+		fp = sp
+	}
+
 	viper.SetConfigName("picasa")
-	viper.AddConfigPath(".")
+	viper.AddConfigPath(fp)
 	viper.SetConfigType("yaml")
 
 	err := viper.ReadInConfig() // Read the config file

@@ -37,7 +37,7 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 	menu := SetMenuItem(ctx, a)
 	runtime.MenuSetApplicationMenu(ctx, menu)
-	a.appConf.Init()
+	a.appConf.Init("")
 }
 
 func (a *App) GetDownloadedImages() []string {
