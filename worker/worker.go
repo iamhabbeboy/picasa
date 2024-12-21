@@ -13,42 +13,52 @@ var (
 	INTERVAL_SEC = 10
 )
 
-// type App struct {
-// appConf *internal.AppConfig
-// }
+func test() {
+	t := time.NewTicker(time.Duration(30 * time.Second))
+	for _ = range t.C {
+		println("Hello, world")
+		// scheduleSetDesktopWallpaper(conf)
+	}
+
+}
 
 // Get the config interval duration
 // Get the images path
 // Set the desktop wallpaper
 func main() {
-	conf := &internal.AppConfig{}
-	conf.Init()
-
-	deskw := time.NewTicker(1 * time.Minute)
-	down := time.NewTicker(7 * 24 * time.Hour)
-
-	defer deskw.Stop()
-	defer down.Stop()
-
-	quit := make(chan struct{})
-
-	go func() {
-		for {
-			select {
-			case <-deskw.C:
-				scheduleSetDesktopWallpaper(conf)
-			// case <-down.C:
-			// scheduleDownloadImages()
-			case <-quit:
-				fmt.Println("Worker stopped.")
-				return
-			}
-		}
-	}()
+	// conf := &internal.AppConfig{}
+	// conf.Init()
+	test()
+	//
+	// deskw := time.NewTicker(30 * time.Second)
+	// down := time.NewTicker(7 * 24 * time.Hour)
+	//
+	// defer deskw.Stop()
+	// defer down.Stop()
+	//
+	// quit := make(chan struct{})
+	//
+	// for {
+	// 	select {
+	// 	case <-deskw.C:
+	// 		currentTime := time.Now()
+	// 		if !lastRun.IsZero() {
+	// 			diff := currentTime.Sub(lastRun)
+	// 			fmt.Printf("Time difference between runs: %v\n", diff)
+	// 		} else {
+	// 			fmt.Println("First run!")
+	// 		}
+	// 		println("Setting wallpaper event")
+	// 		// 		scheduleSetDesktopWallpaper(conf)
+	// 		// 	// case <-down.C:
+	// 		// 	// scheduleDownloadImages()
+	//
+	// 		lastRun = currentTime
+	// 	}
+	// }
 
 	// Simulate running for some time (e.g., 1 hour)
-	// time.Sleep(1 * time.Hour)
-	close(quit)
+	// close(quit)
 }
 
 func scheduleDownloadImages() error {
@@ -61,13 +71,12 @@ func scheduleSetDesktopWallpaper(conf *internal.AppConfig) error {
 	cnf, _ := conf.Get("image.selected_abs_path")
 	fp := cnf.(string)
 	imgs := getImages(fp)
-	fmt.Println(imgs)
+	fmt.Println(len(imgs))
 
-	rand.Seed(time.Now().UnixNano())
-	rand.Shuffle(len(imgs), func(i, j int) {
-		imgs[i], imgs[j] = imgs[j], imgs[i]
-	})
-	// internal.WallpaperEvent("")
+	random := rand.Intn(len(imgs))
+	f := imgs[random]
+	fmt.Println(f)
+	internal.WallpaperEvent(f)
 	// read the directory
 	// get the files in the folder
 	// randomize it and set as wallpaper

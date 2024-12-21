@@ -39,15 +39,16 @@ func (h *FileLoader) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 }
 
 func startBackgroundWorker() {
-	// Build the background worker
 	cmd := exec.Command("./worker/picasa_worker")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err := cmd.Start()
 	if err != nil {
 		fmt.Println("Error starting worker:", err)
+		fmt.Println("--------")
 		return
 	}
+	fmt.Println("=====")
 	err = cmd.Wait()
 	if err != nil {
 		fmt.Println("Worker process finished with error:", err)
