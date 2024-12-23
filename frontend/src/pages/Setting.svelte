@@ -1,30 +1,25 @@
 <script lang="ts">
-  import Layout from "../components/Layout.svelte";
+  import Layout from '../components/Layout.svelte';
   import {
     DownloadImages,
     GetConfig,
     SetConfig,
     OpenDirDialogWindow,
     MessageDialog,
-  } from "../../wailsjs/go/main/App.js";
+    SelectImageDir,
+  } from '../../wailsjs/go/main/App.js';
 
-  import { onMount } from "svelte";
+  import { onMount } from 'svelte';
 
-  import { WindowReload } from "../../wailsjs/runtime";
-
-  let imageCategory = "";
+  let imageCategory = '';
   let totalImageCount = 0;
-  let imageInterval = "";
-  let message = "";
-  let defaultPath = "";
-  let apikey = "xksdflksjdf";
+  let imageInterval = '';
+  let message = '';
+  let defaultPath = '';
+  let apikey = '';
 
   async function handleSaveSetting() {
-    if (
-      imageCategory === "" ||
-      totalImageCount === "" ||
-      imageInterval === ""
-    ) {
+    if (imageCategory === '' || totalImageCount === 0 || imageInterval === '') {
       return;
     }
 
@@ -32,6 +27,7 @@
       ImageCategory: imageCategory,
       TotalImage: Number(totalImageCount),
       DefaultPath: defaultPath,
+      Interval: imageInterval,
     };
 
     /*DownloadImages(conf).then((res) => {
@@ -40,9 +36,9 @@
 
     SetConfig(conf);
     try {
-      const msg = await MessageDialog("Config updated successfully");
+      const msg = await MessageDialog('Config updated successfully');
     } catch (e) {
-      const error = e instanceof Error ? e.message : "Unknown error";
+      const error = e instanceof Error ? e.message : 'Unknown error';
       message = error;
     }
   }
@@ -57,7 +53,7 @@
 
   const handleSelectFolder = async () => {
     const path = await OpenDirDialogWindow();
-    if (path === "") {
+    if (path === '') {
       defaultPath = defaultPath;
     } else {
       defaultPath = path;
@@ -67,18 +63,20 @@
 
   const handleRestoreSetting = async () => {
     const conf = {
-      ImageCategory: "nature",
+      ImageCategory: 'nature',
       TotalImage: 10,
-      DefaultPath: ".picasa/images",
+      DefaultPath: '.picasa/images',
+      Interval: '30s',
     };
     imageCategory = conf.ImageCategory;
     totalImageCount = conf.TotalImage;
     defaultPath = conf.DefaultPath;
+    imageInterval = conf.Interval;
     SetConfig(conf);
     try {
-      await MessageDialog("Config restored successfully");
+      await MessageDialog('Config restored successfully');
     } catch (e) {
-      const error = e instanceof Error ? e.message : "Unknown error";
+      const error = e instanceof Error ? e.message : 'Unknown error';
       message = error;
     }
   };
@@ -130,6 +128,16 @@
                 >(e.g: 5m, 10m, 1h, 5h)
               </span></label
             >
+            <!--<select
+              bind:value={imageInterval}
+              class="border border-gray-400 p-2 h-11 w-6/12 rounded-md outline-none"
+            >
+              <option value="10s">10s</option>
+              <option value="30s">30s</option>
+              <option value="10m">10m</option>
+              <option value="30m">30m</option>
+              <option value="1h">1h</option>
+            </select> -->
             <input
               type="text"
               class="border border-gray-400 p-2 w-6/12 rounded-md outline-none"

@@ -43,6 +43,7 @@ func (a *AppConfig) Init(sp string) {
 
 	viper.SetDefault("api.download_limit", 10)
 	viper.SetDefault("api.download_interval", "1w")
+	viper.SetDefault("api.unsplash_apikey", "Nw5jS2P4zr_oO_qbFt_39zyj7QTIMI49vYx5lCzxujY")
 	viper.SetDefault("api.image_category", "country")
 	viper.SetDefault("api.source_apis", []string{"unsplash"})
 

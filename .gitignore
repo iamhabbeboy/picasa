@@ -7,8 +7,9 @@ main
 frontend/node_modules
 frontend/.svelte-kit
 frontend/.vscode
+frontend/dist
 /build
 picasa.yaml
 frontend/dist
 desktop
-worker/picasa_worker
+scheduler/picasa_scheduler

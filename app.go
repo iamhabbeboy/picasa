@@ -5,6 +5,7 @@ import (
 	"desktop/internal"
 	"desktop/internal/api"
 	"fmt"
+	"log"
 	"os"
 	"strings"
 
@@ -81,7 +82,20 @@ func (a *App) SelectImageDir() []string {
 }
 
 func (a *App) DownloadImages(conf api.ImageConfig) {
-	internal.FetchImages(conf)
+	apikey, _ := a.appConf.Get("api.unsplash_apikey")
+	dp, _ := a.appConf.Get("image.selected_abs_path")
+	if apikey == nil || dp == nil {
+		log.Fatal("Image path not set")
+	}
+
+	c := api.ImageConfig{
+		Category:           conf.Category,
+		TotalDownloadImage: conf.TotalDownloadImage,
+		Path:               dp.(string),
+		Apikey:             apikey.(string),
+	}
+
+	internal.FetchImages(c)
 }
 
 func (a *App) SetWallpaper(path string) {
@@ -91,15 +105,42 @@ func (a *App) SetWallpaper(path string) {
 func (a *App) GetConfig() Conf {
 	imgCat, _ := a.appConf.Get("api.image_category")
 	totalImg, _ := a.appConf.Get("api.download_limit")
-	intvl, _ := a.appConf.Get("api.interval")
+	intvl, _ := a.appConf.Get("image.interval")
 	dp, _ := a.appConf.Get("image.selected_abs_path")
 
-	c := Conf{
-		ImageCategory: imgCat.(string),
-		TotalImage:    totalImg.(int),
-		Interval:      intvl.(string),
-		DefaultPath:   dp.(string),
+	var img, intv, d string
+	var tot int
+	if imgCat == nil {
+		img = ""
+	} else {
+		img = imgCat.(string)
 	}
+
+	if totalImg == nil {
+		tot = 0
+	} else {
+		tot = totalImg.(int)
+	}
+
+	if intvl == nil {
+		intv = ""
+	} else {
+		intv = intvl.(string)
+	}
+
+	if dp == nil {
+		d = ""
+	} else {
+		d = dp.(string)
+	}
+
+	c := Conf{
+		ImageCategory: img,
+		TotalImage:    tot,
+		Interval:      intv,
+		DefaultPath:   d,
+	}
+
 	return c
 }
 
@@ -107,6 +148,7 @@ func (a *App) SetConfig(conf Conf) {
 	a.appConf.Set("api.image_category", conf.ImageCategory)
 	a.appConf.Set("api.download_limit", conf.TotalImage)
 	a.appConf.Set("image.selected_abs_path", conf.DefaultPath)
+	a.appConf.Set("image.interval", conf.Interval)
 }
 
 func (a *App) OpenDirDialogWindow() string {

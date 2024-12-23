@@ -7,13 +7,15 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"sync"
 
 	log "github.com/sirupsen/logrus"
 )
 
 type UnleaseService struct {
-	config *ConfigService
+	apikey string
+	path   string
 }
 
 type Image struct {
@@ -29,29 +31,32 @@ type Image struct {
 type ImageConfig struct {
 	Category           string
 	TotalDownloadImage int
+	Apikey             string
+	Path               string
 }
 
-func NewUnsplashService() *UnleaseService {
+func NewUnsplashService(apikey string, path string) *UnleaseService {
 	return &UnleaseService{
-		config: &ConfigService{},
+		apikey: apikey,
+		path:   path,
 	}
 }
 
 func (u *UnleaseService) GetImages(imgConf ImageConfig) error {
-	//c, _ := u.config.GetItem("picasa")
-
-	// access_key: Nw5jS2P4zr_oO_qbFt_39zyj7QTIMI49vYx5lCzxujY
-	// api_key: pseMeAYqR4G1I8cx8vbwkm4HTs1o56NzW6ZiKGHCMNs
-	// url: https://api.unsplash.com
-	apiUrl := "https://api.unsplash.com" //c.APIUrl                     //u.config.Get("api.url")
-	query := imgConf.Category            //u.config.Get("api.query")
+	apiUrl := "https://api.unsplash.com"
+	query := imgConf.Category
 	imgCount := imgConf.TotalDownloadImage
 	maxImage := strconv.Itoa(imgCount)
-	accessKey := "Nw5jS2P4zr_oO_qbFt_39zyj7QTIMI49vYx5lCzxujY"
-	fmt.Println(maxImage, " is here")
-	home, _ := os.UserHomeDir()
-	fp := fmt.Sprintf("%s/.picasa/images/", home)
-	imagePath := fp
+	accessKey := u.apikey // "Nw5jS2P4zr_oO_qbFt_39zyj7QTIMI49vYx5lCzxujY"
+
+	var imagePath string
+	if strings.Contains(u.path, ".picasa") {
+		home, _ := os.UserHomeDir()
+		fp := fmt.Sprintf("%s/.picasa/images/", home)
+		imagePath = fp
+	}
+
+	imagePath = u.path
 	url := fmt.Sprintf("%s/photos/random?client_id=%s&count=%s&orientation=landscape&query=%s", apiUrl, accessKey, maxImage, query)
 	fmt.Println("Download...")
 	fmt.Println(url)
