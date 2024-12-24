@@ -148,7 +148,7 @@ func (a *App) GetConfig() Conf {
 	}
 
 	if dp == nil {
-		d = "Nw5jS2P4zr_oO_qbFt_39zyj7QTIMI49vYx5lCzxujY" //TODO: hardcoding api key is bad, but
+		d = "Nw5jS2P4zr_oO_qbFt_39zyj7QTIMI49vYx5lCzxujY" //TODO: hardcoding api key is bad, but what can i say... user can be funny, this will help restore the key even when deleted
 	} else {
 		d = dp.(string)
 	}
