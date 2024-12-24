@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	neturl "net/url"
 	"os"
 	"strconv"
 	"strings"
@@ -23,6 +24,11 @@ type Image struct {
 		Raw  string `json:"raw"`
 		Full string `json:"full"`
 	} `json:"urls"`
+	User struct {
+		Links struct {
+			Html string `json:"html"`
+		} `json:"links"`
+	} `json:"user"`
 	Links struct {
 		Download string `json:"download"`
 	} `json:"links"`
@@ -47,7 +53,7 @@ func (u *UnleaseService) GetImages(imgConf ImageConfig) error {
 	query := imgConf.Category
 	imgCount := imgConf.TotalDownloadImage
 	maxImage := strconv.Itoa(imgCount)
-	accessKey := u.apikey // "Nw5jS2P4zr_oO_qbFt_39zyj7QTIMI49vYx5lCzxujY"
+	accessKey := u.apikey
 
 	var imagePath string
 	if strings.Contains(u.path, ".picasa") {
@@ -68,7 +74,18 @@ func (u *UnleaseService) GetImages(imgConf ImageConfig) error {
 	var wg sync.WaitGroup
 	for key, v := range result {
 		wg.Add(1)
-		go download(v.Urls.Full, key, &wg, imagePath)
+		struri := v.User.Links.Html
+		parsedURL, err := neturl.Parse(struri)
+
+		if err != nil {
+			fmt.Println("Error parsing URL:", err)
+		}
+
+		path := parsedURL.Path
+		parts := strings.Split(path, "/")
+		username := parts[len(parts)-1]
+
+		go download(v.Urls.Full, key, &wg, imagePath, username)
 	}
 	wg.Wait()
 	return nil
@@ -86,17 +103,20 @@ func getImage(url string) ([]Image, error) {
 	return p, nil
 }
 
-func download(image string, index int, wg *sync.WaitGroup, IMAGE_DIR string) {
+func download(image string, index int, wg *sync.WaitGroup, IMAGE_DIR string, upr string) {
 	defer wg.Done()
 	resp, err := http.Get(image)
 	if err != nil {
 		log.Fatal(err)
 	}
-	info := fmt.Sprintf("Downloading: %s/%v", IMAGE_DIR, index)
+	fn := fmt.Sprintf("%s/picasa_%v_%s.jpg", IMAGE_DIR, index, upr)
+
+	info := fmt.Sprintf("Downloading: %s", fn)
 	fmt.Println(info)
 
 	defer resp.Body.Close()
-	f, err := os.Create(fmt.Sprintf("%s/%v.jpg", IMAGE_DIR, index))
+	f, err := os.Create(fn)
+	// fmt.Sprintf("%s/%v.jpg", IMAGE_DIR, index))
 	if err != nil {
 		log.Fatal(err)
 	}

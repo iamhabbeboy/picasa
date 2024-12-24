@@ -4,7 +4,7 @@
     SelectImageDir,
     DownloadImages,
   } from '../../wailsjs/go/main/App.js';
-  import { BrowserOpenURL } from '../../wailsjs/runtime';
+
   import rpc from '../rpc';
   import { replace, link } from 'svelte-spa-router';
   import Modal from '../components/Modal.svelte';
@@ -27,10 +27,6 @@
 
   function dispatcher(image: string) {
     imagePathStore.set(image);
-  }
-
-  function openCreditUrl(name: string) {
-    BrowserOpenURL('https://unsplash.com/' + name);
   }
 
   async function handleOpenSelectFolder() {
@@ -129,45 +125,5 @@
   .image-config {
     padding: 10px;
     text-align: left;
-  }
-
-  .image {
-    background: transparent;
-    margin: 5px 2px;
-    position: relative;
-  }
-
-  .image-placeholder {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: cover;
-    cursor: pointer;
-    transition: 0.5s all;
-  }
-
-  .image-placeholder:hover {
-    opacity: 0.4;
-  }
-
-  .caption {
-    background: rgba(0, 0, 0, 0.5);
-    position: absolute;
-    bottom: 5px;
-    padding: 10px;
-    margin: 0px;
-    font-size: 12px;
-    color: #999;
-  }
-
-  .caption button {
-    text-decoration: underline;
-    color: #ddd;
-    background: transparent;
-    border: 0px;
-    cursor: pointer;
-  }
-
-  .caption button:hover {
-    text-decoration: none;
   }
 </style>

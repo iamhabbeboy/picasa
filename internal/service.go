@@ -3,13 +3,12 @@ package internal
 import (
 	"desktop/internal/api"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"path"
 	"path/filepath"
 	"strings"
-
-	"github.com/labstack/gommon/log"
 )
 
 func GetImagesFromDir() []string {

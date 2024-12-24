@@ -1,22 +1,37 @@
 <script type="ts">
-  import { fade, slide } from "svelte/transition";
-  import { imagePathStore } from "../store/app";
-  import CloseIcon from "../assets/images/close.svg";
-  import { SetWallpaper } from "../../wailsjs/go/main/App.js";
+  import { fade, slide } from 'svelte/transition';
+  import { imagePathStore } from '../store/app';
+  import CloseIcon from '../assets/images/close.svg';
+  import { SetWallpaper } from '../../wailsjs/go/main/App.js';
+  import { BrowserOpenURL } from '../../wailsjs/runtime';
 
-  let path = "";
+  let path = '';
+
+  function getUsername(imageFileName: string) {
+    const [_, user] = imageFileName.split('_@');
+    if (!user) return '';
+
+    const [u] = user.split('.');
+    if (!u) return '';
+
+    return `@${u}`;
+  }
 
   imagePathStore.subscribe((value) => {
     path = value;
   });
 
   const closeModal = () => {
-    imagePathStore.update((value) => (value = ""));
+    imagePathStore.update((value) => (value = ''));
     return;
   };
 
+  function openBrowser(uri: string) {
+    BrowserOpenURL(`https://${uri}`);
+  }
+
   const handleKeydown = (event: KeyboardEvent) => {
-    if (event.key === "Escape") {
+    if (event.key === 'Escape') {
       closeModal();
     }
   };
@@ -30,7 +45,7 @@
 
 <template>
   <div>
-    {#if path !== ""}
+    {#if path !== ''}
       <div
         class="modal-background"
         on:click={closeModal}
@@ -52,14 +67,26 @@
               <img src={CloseIcon} width="20" alt="close icon" />
             </a>
           </div>
-          <div class="align-left text-gray-700 text-xs py-2">
-            <span class="mr-3">Credit: <a href="/">Unsplash</a></span> /
-            <span class="ml-3"
-              >Author: <a href="/" class="underline hover:no-underline"
-                >Abbey web</a
-              ></span
-            >
-          </div>
+          {#if getUsername(path) !== ''}
+            <div class="align-left text-gray-700 text-xs py-2">
+              <span class="mr-3"
+                >Credit: <a
+                  href="#"
+                  on:click={() => openBrowser('unsplash.com')}>Unsplash</a
+                ></span
+              >
+              /
+              <span class="ml-3"
+                >Author: <a
+                  on:click={() =>
+                    openBrowser(`unsplash.com/${getUsername(path)}`)}
+                  href="#"
+                  class="underline hover:no-underline"
+                  >{getUsername(path)}
+                </a></span
+              >
+            </div>
+          {/if}
           <div class="overflow-hidden w-[800px] h-[600px] mx-auto">
             <img
               src={path}
