@@ -3,18 +3,18 @@
     GetDownloadedImages,
     SelectImageDir,
     DownloadImages,
-  } from "../../wailsjs/go/main/App.js";
-  import { BrowserOpenURL } from "../../wailsjs/runtime";
-  import rpc from "../rpc";
-  import { replace, link } from "svelte-spa-router";
-  import Modal from "../components/Modal.svelte";
-  import { imagePathStore } from "../store/app";
-  import { onMount } from "svelte";
-  import ImageConfig from "../components/ImageConfig.svelte";
-  import DownloadImage from "../../src/assets/images/download.svg";
-  import ConfigImage from "../../src/assets/images/config.svg";
+  } from '../../wailsjs/go/main/App.js';
+  import { BrowserOpenURL } from '../../wailsjs/runtime';
+  import rpc from '../rpc';
+  import { replace, link } from 'svelte-spa-router';
+  import Modal from '../components/Modal.svelte';
+  import { imagePathStore } from '../store/app';
+  import { onMount } from 'svelte';
+  import ImageConfig from '../components/ImageConfig.svelte';
+  import DownloadImage from '../../src/assets/images/download.svg';
+  import ConfigImage from '../../src/assets/images/config.svg';
 
-  import LoaderImage from "../../src/assets/images/loader.svg";
+  import LoaderImage from '../../src/assets/images/loader.svg';
 
   let images: string[] = [];
   let path: string;
@@ -30,7 +30,7 @@
   }
 
   function openCreditUrl(name: string) {
-    BrowserOpenURL("https://unsplash.com/" + name);
+    BrowserOpenURL('https://unsplash.com/' + name);
   }
 
   async function handleOpenSelectFolder() {
@@ -39,10 +39,16 @@
     isFolderSelected = true;
   }
 
-  function downloadImages() {
-    /*DownloadImages().then((res) => {
-      console.log(res)
-    })*/
+  async function downloadImages() {
+    try {
+      isLoading = true;
+      const res = await DownloadImages();
+    } catch (e) {
+    } finally {
+      const result = await GetDownloadedImages();
+      images = result ?? [];
+      isLoading = false;
+    }
   }
 
   onMount(async () => {
@@ -50,8 +56,8 @@
     images = result ?? [];
     isLoading = false;
 
-    rpc.on("shortcut.page.setting", () => {
-      replace("/setting");
+    rpc.on('shortcut.page.setting', () => {
+      replace('/setting');
     });
   });
 </script>

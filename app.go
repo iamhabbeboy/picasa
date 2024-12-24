@@ -23,6 +23,7 @@ type Conf struct {
 	TotalImage    int
 	Interval      string
 	DefaultPath   string
+	Apikey        string
 }
 
 const APP_NAME = ".picasa"
@@ -38,7 +39,7 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 	menu := SetMenuItem(ctx, a)
 	runtime.MenuSetApplicationMenu(ctx, menu)
-	a.appConf.Init("")
+	a.appConf.Init(".")
 }
 
 func (a *App) GetDownloadedImages() []string {
@@ -81,16 +82,33 @@ func (a *App) SelectImageDir() []string {
 	return imgs
 }
 
-func (a *App) DownloadImages(conf api.ImageConfig) {
+func (a *App) DownloadImages() {
 	apikey, _ := a.appConf.Get("api.unsplash_apikey")
 	dp, _ := a.appConf.Get("image.selected_abs_path")
+	tot, _ := a.appConf.Get("api.download_limit")
+	cat, _ := a.appConf.Get("api.image_category")
+
 	if apikey == nil || dp == nil {
 		log.Fatal("Image path not set")
 	}
 
+	var ct int
+	if tot == nil {
+		ct = 10
+	} else {
+		ct = tot.(int)
+	}
+
+	var ccat string
+	if cat == nil {
+		ccat = "technology"
+	} else {
+		ccat = cat.(string)
+	}
+
 	c := api.ImageConfig{
-		Category:           conf.Category,
-		TotalDownloadImage: conf.TotalDownloadImage,
+		Category:           ccat,
+		TotalDownloadImage: ct,
 		Path:               dp.(string),
 		Apikey:             apikey.(string),
 	}
@@ -107,6 +125,7 @@ func (a *App) GetConfig() Conf {
 	totalImg, _ := a.appConf.Get("api.download_limit")
 	intvl, _ := a.appConf.Get("image.interval")
 	dp, _ := a.appConf.Get("image.selected_abs_path")
+	akey, _ := a.appConf.Get("api.unsplash_apikey")
 
 	var img, intv, d string
 	var tot int
@@ -129,9 +148,16 @@ func (a *App) GetConfig() Conf {
 	}
 
 	if dp == nil {
-		d = ""
+		d = "Nw5jS2P4zr_oO_qbFt_39zyj7QTIMI49vYx5lCzxujY" //TODO: hardcoding api key is bad, but what can i say... user can be funny, this will help restore the key even when deleted
 	} else {
 		d = dp.(string)
+	}
+
+	var k string
+	if akey == nil {
+		k = ""
+	} else {
+		k = akey.(string)
 	}
 
 	c := Conf{
@@ -139,6 +165,7 @@ func (a *App) GetConfig() Conf {
 		TotalImage:    tot,
 		Interval:      intv,
 		DefaultPath:   d,
+		Apikey:        k,
 	}
 
 	return c
