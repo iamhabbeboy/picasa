@@ -27,8 +27,8 @@ func main() {
 
 	apikey, _ := conf.Get("api.unsplash_apikey")
 	dp, _ := conf.Get("image.selected_abs_path")
-	cat, _ := conf.Get("api.image_category")
-	totimg, _ := conf.Get("api.download_limit")
+	// cat, _ := conf.Get("api.image_category")
+	// totimg, _ := conf.Get("api.download_limit")
 
 	if apikey == nil || dp == nil {
 		log.Fatal("Image path not set")
@@ -36,20 +36,20 @@ func main() {
 
 	cimgs := imgs.(string)
 
-	var ccat string
-	var ctotimg int
-
-	if cat == nil {
-		ccat = "technology"
-	} else {
-		ccat = cat.(string)
-	}
-
-	if totimg == nil {
-		ctotimg = 10
-	} else {
-		ctotimg = totimg.(int)
-	}
+	// var ccat string
+	// var ctotimg int
+	//
+	// if cat == nil {
+	// 	ccat = "technology"
+	// } else {
+	// 	ccat = cat.(string)
+	// }
+	//
+	// if totimg == nil {
+	// 	ctotimg = 10
+	// } else {
+	// 	ctotimg = totimg.(int)
+	// }
 
 	// c := api.ImageConfig{
 	// 	Category:           ccat,

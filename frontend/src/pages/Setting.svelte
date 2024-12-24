@@ -6,10 +6,10 @@
     SetConfig,
     OpenDirDialogWindow,
     MessageDialog,
-    SelectImageDir,
   } from '../../wailsjs/go/main/App.js';
 
   import { onMount } from 'svelte';
+  import type { Configuration } from '../types/Config';
 
   let imageCategory = '';
   let totalImageCount = 0;
@@ -28,15 +28,12 @@
       TotalImage: Number(totalImageCount),
       DefaultPath: defaultPath,
       Interval: imageInterval,
+      Apikey: apikey,
     };
-
-    /*DownloadImages(conf).then((res) => {
-    console.log(res)
-  })*/
 
     SetConfig(conf);
     try {
-      const msg = await MessageDialog('Config updated successfully');
+      await MessageDialog('Config updated successfully');
     } catch (e) {
       const error = e instanceof Error ? e.message : 'Unknown error';
       message = error;
@@ -44,11 +41,12 @@
   }
 
   onMount(async () => {
-    const conf = (await GetConfig()) as any;
+    const conf = (await GetConfig()) as Configuration;
     imageCategory = conf.ImageCategory;
     totalImageCount = conf.TotalImage;
     imageInterval = conf.Interval;
     defaultPath = conf.DefaultPath;
+    apikey = conf.Apikey;
   });
 
   const handleSelectFolder = async () => {
@@ -58,7 +56,6 @@
     } else {
       defaultPath = path;
     }
-    //isFolderSelected = true;
   };
 
   const handleRestoreSetting = async () => {
@@ -67,11 +64,14 @@
       TotalImage: 10,
       DefaultPath: '.picasa/images',
       Interval: '30s',
+      Apikey: '',
     };
     imageCategory = conf.ImageCategory;
     totalImageCount = conf.TotalImage;
     defaultPath = conf.DefaultPath;
     imageInterval = conf.Interval;
+    apikey = conf.Apikey;
+
     SetConfig(conf);
     try {
       await MessageDialog('Config restored successfully');
@@ -158,7 +158,6 @@
               bind:value={apikey}
             />
           </div>
-
           <div class="mt-5">
             <button
               class="text-gray-100 py-2 px-10 mb-3 rounded-md bg-gray-500"
