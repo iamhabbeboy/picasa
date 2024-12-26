@@ -13,14 +13,8 @@ import (
 )
 
 func main() {
-	wd, err := os.Getwd()
-	if err != nil {
-		fmt.Println("Error getting current working directory:", err)
-		return
-	}
-
 	conf := &internal.AppConfig{}
-	conf.Init(wd)
+	conf.Init("$HOME/.picasa")
 
 	cint, _ := conf.Get("image.interval")
 	imgs, _ := conf.Get("image.selected_abs_path")

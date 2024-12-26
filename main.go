@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"path/filepath"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/logger"
@@ -39,7 +40,7 @@ func (h *FileLoader) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 }
 
 func startSchedulerWorker() {
-	cmd := exec.Command("./worker/picasa_worker")
+	cmd := exec.Command("./scheduler/picasa_scheduler")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	err := cmd.Start()
@@ -56,7 +57,30 @@ func startSchedulerWorker() {
 	fmt.Printf("[Main App] Scheduler started with PID: %d\n", cmd.Process.Pid)
 }
 
+func createPicasaBaseDir() {
+	baseDir, _ := os.UserHomeDir()
+	parentDir := fmt.Sprintf("%s/.picasa", baseDir)
+	childDir := filepath.Join(parentDir, "images")
+
+	// Create the parent directory
+	err := os.MkdirAll(parentDir, 0755)
+	if err != nil {
+		fmt.Printf("Error creating parent directory: %v\n", err)
+		return
+	}
+
+	err = os.MkdirAll(childDir, 0755)
+	if err != nil {
+		fmt.Printf("Error creating child directory: %v\n", err)
+		return
+	}
+}
+
 func main() {
+
+	createPicasaBaseDir()
+
+	go startSchedulerWorker()
 
 	app := NewApp()
 
@@ -97,12 +121,12 @@ func main() {
 			About: &mac.AboutInfo{
 				Title:   "Picasa Desktop",
 				Message: "©2024 Abiodun Azeez",
+				// Icon: []byte,
 			},
 		},
 	})
 
 	if err != nil {
 		fmt.Printf("[Main] Error starting Wails app: %v\n", err)
-		os.Exit(1)
 	}
 }

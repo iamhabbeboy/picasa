@@ -14,9 +14,10 @@ import (
 
 // App struct
 type App struct {
-	ctx     context.Context
-	appConf *internal.AppConfig
+	ctx context.Context
 }
+
+var appConf = internal.AppConfig{}
 
 type Conf struct {
 	ImageCategory string
@@ -39,11 +40,11 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 	menu := SetMenuItem(ctx, a)
 	runtime.MenuSetApplicationMenu(ctx, menu)
-	a.appConf.Init(".")
+	appConf.Init("$HOME/.picasa")
 }
 
 func (a *App) GetDownloadedImages() []string {
-	selectedPath, err := a.appConf.Get("image.selected_abs_path")
+	selectedPath, err := appConf.Get("image.selected_abs_path")
 
 	if err != nil {
 		println(err)
@@ -70,7 +71,7 @@ func (a *App) SelectImageDir() []string {
 	}
 
 	// store the path selected.
-	a.appConf.Set("image.selected_abs_path", dir)
+	appConf.Set("image.selected_abs_path", dir)
 
 	imgs, err := internal.GetAllFilesInDir(dir)
 
@@ -83,10 +84,10 @@ func (a *App) SelectImageDir() []string {
 }
 
 func (a *App) DownloadImages() {
-	apikey, _ := a.appConf.Get("api.unsplash_apikey")
-	dp, _ := a.appConf.Get("image.selected_abs_path")
-	tot, _ := a.appConf.Get("api.download_limit")
-	cat, _ := a.appConf.Get("api.image_category")
+	apikey, _ := appConf.Get("api.unsplash_apikey")
+	dp, _ := appConf.Get("image.selected_abs_path")
+	tot, _ := appConf.Get("api.download_limit")
+	cat, _ := appConf.Get("api.image_category")
 
 	if apikey == nil || dp == nil {
 		log.Fatal("Image path not set")
@@ -121,11 +122,11 @@ func (a *App) SetWallpaper(path string) {
 }
 
 func (a *App) GetConfig() Conf {
-	imgCat, _ := a.appConf.Get("api.image_category")
-	totalImg, _ := a.appConf.Get("api.download_limit")
-	intvl, _ := a.appConf.Get("image.interval")
-	dp, _ := a.appConf.Get("image.selected_abs_path")
-	akey, _ := a.appConf.Get("api.unsplash_apikey")
+	imgCat, _ := appConf.Get("api.image_category")
+	totalImg, _ := appConf.Get("api.download_limit")
+	intvl, _ := appConf.Get("image.interval")
+	dp, _ := appConf.Get("image.selected_abs_path")
+	akey, _ := appConf.Get("api.unsplash_apikey")
 
 	var img, intv, d string
 	var tot int
@@ -172,10 +173,10 @@ func (a *App) GetConfig() Conf {
 }
 
 func (a *App) SetConfig(conf Conf) {
-	a.appConf.Set("api.image_category", conf.ImageCategory)
-	a.appConf.Set("api.download_limit", conf.TotalImage)
-	a.appConf.Set("image.selected_abs_path", conf.DefaultPath)
-	a.appConf.Set("image.interval", conf.Interval)
+	appConf.Set("api.image_category", conf.ImageCategory)
+	appConf.Set("api.download_limit", conf.TotalImage)
+	appConf.Set("image.selected_abs_path", conf.DefaultPath)
+	appConf.Set("image.interval", conf.Interval)
 }
 
 func (a *App) OpenDirDialogWindow() string {

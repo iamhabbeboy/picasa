@@ -7,9 +7,10 @@ build-worker:
 	@echo "Building worker..."
 	go build -o $(WORKER_PATH) $(WORKER)
 
-release-app:
-	@echo "Building desktop app for release..."
+build-wails:
 	wails build
+
+release-app: build-worker build-wails
 
 # Build both the worker and the desktop app
 build: build-worker #build-app
