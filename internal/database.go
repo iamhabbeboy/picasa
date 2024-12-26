@@ -3,6 +3,7 @@ package internal
 import (
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"github.com/spf13/viper"
@@ -37,7 +38,10 @@ func (a *AppConfig) Init(sp string) {
 	viper.SetDefault("app.version", "0.1.0")
 	// viper.SetDefault("app.default_path", "~/.picasa/")
 
-	viper.SetDefault("image.selected_abs_path", ".picasa/images")
+	home, _ := os.UserHomeDir()
+	fpt := fmt.Sprintf("%s/.picasa/images", home)
+
+	viper.SetDefault("image.selected_abs_path", fpt)
 	viper.SetDefault("image.last_downloads", "")
 	viper.SetDefault("image.interval", "10m")
 
