@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"os/exec"
 	"path/filepath"
 
 	"github.com/wailsapp/wails/v2"
@@ -37,24 +36,6 @@ func (h *FileLoader) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	}
 
 	res.Write(fileData)
-}
-
-func startSchedulerWorker() {
-	cmd := exec.Command("./scheduler/picasa_scheduler")
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	err := cmd.Start()
-	if err != nil {
-		fmt.Println("Error starting worker:", err)
-		return
-	}
-
-	err = cmd.Wait()
-	if err != nil {
-		fmt.Println("Worker process finished with error:", err)
-	}
-
-	fmt.Printf("[Main App] Scheduler started with PID: %d\n", cmd.Process.Pid)
 }
 
 func createPicasaBaseDir() {
