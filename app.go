@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"strings"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
@@ -34,6 +35,25 @@ func NewApp() *App {
 	return &App{}
 }
 
+func startSchedulerWorker() {
+	fmt.Println("Loading scheduler.....")
+	cmd := exec.Command("/usr/local/bin/picasa_scheduler")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	err := cmd.Start()
+	if err != nil {
+		fmt.Println("Error starting worker:", err)
+		return
+	}
+
+	err = cmd.Wait()
+	if err != nil {
+		fmt.Println("Worker process finished with error:", err)
+	}
+
+	fmt.Printf("[Main App] Scheduler started with PID: %d\n", cmd.Process.Pid)
+}
+
 // startup is called when the app starts. The context is saved
 // so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
@@ -41,6 +61,7 @@ func (a *App) startup(ctx context.Context) {
 	menu := SetMenuItem(ctx, a)
 	runtime.MenuSetApplicationMenu(ctx, menu)
 	appConf.Init("$HOME/.picasa")
+	startSchedulerWorker()
 }
 
 func (a *App) GetDownloadedImages() []string {
