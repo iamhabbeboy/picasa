@@ -47,7 +47,11 @@
     }
   }
 
-  onMount(async () => {
+  const disableRightClick = (event) => {
+    event.preventDefault();
+  };
+
+  onMount(async (): Promise<any> => {
     const result = await GetDownloadedImages();
     images = result ?? [];
     isLoading = false;
@@ -55,11 +59,20 @@
     rpc.on('shortcut.page.setting', () => {
       replace('/setting');
     });
+
+    document.addEventListener('contextmenu', disableRightClick);
+
+    return () => {
+      document.removeEventListener('contextmenu', disableRightClick);
+    };
   });
 </script>
 
 <template>
-  <div class="image-config border-b dark:border-gray-600 flex justify-between">
+  <div
+    class="image-config border-b dark:border-gray-600 flex justify-between"
+    on:contextmenu={disableRightClick}
+  >
     <a
       href="#"
       on:click={downloadImages}

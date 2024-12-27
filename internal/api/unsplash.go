@@ -55,14 +55,13 @@ func (u *UnleaseService) GetImages(imgConf ImageConfig) error {
 	maxImage := strconv.Itoa(imgCount)
 	accessKey := u.apikey
 
-	var imagePath string
+	var imagePath string = u.path
 	if strings.Contains(u.path, ".picasa") {
 		home, _ := os.UserHomeDir()
-		fp := fmt.Sprintf("%s/.picasa/images/", home)
+		fp := fmt.Sprintf("%s/.picasa/images", home)
 		imagePath = fp
 	}
 
-	imagePath = u.path
 	url := fmt.Sprintf("%s/photos/random?client_id=%s&count=%s&orientation=landscape&query=%s", apiUrl, accessKey, maxImage, query)
 	fmt.Println("Download...")
 	fmt.Println(url)

@@ -80,7 +80,7 @@ func main() {
 
 	createPicasaBaseDir()
 
-	go startSchedulerWorker()
+	// go startSchedulerWorker()
 
 	app := NewApp()
 
