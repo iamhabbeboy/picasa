@@ -1,7 +1,6 @@
 <script lang="ts">
   import Layout from '../components/Layout.svelte';
   import {
-    DownloadImages,
     GetConfig,
     SetConfig,
     OpenDirDialogWindow,
