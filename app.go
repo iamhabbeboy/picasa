@@ -36,7 +36,7 @@ func NewApp() *App {
 }
 
 func startSchedulerWorker() {
-	fmt.Println("Loading scheduler.....")
+	fmt.Println("Loading picasa scheduler.....")
 	cmd := exec.Command("/usr/local/bin/picasa_scheduler")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
