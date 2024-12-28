@@ -102,7 +102,7 @@
     {#if isLoading}
       <div class="mx-auto w-48 h-screen flex justify-center items-center">
         <img src={LoaderImage} alt="" />
-        <h4>Loading...</h4>
+        <h4 class="font-bold">Processing...</h4>
       </div>
     {:else}
       <div class="flex flex-wrap justify-between">
@@ -117,11 +117,6 @@
               alt=""
               class="object-cover h-[100%] w-[100%]"
             />
-            <!--<div class="caption">
-            credit: <button on:click={() => openCreditUrl("name")}
-              >Abbey photo</button
-            >
-          </div>-->
           </div>
         {/each}
       </div>

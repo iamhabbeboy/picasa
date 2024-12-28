@@ -128,13 +128,25 @@ func (a *App) DownloadImages() {
 		ccat = cat.(string)
 	}
 
+	var imagePath = dp.(string)
+	if strings.Contains(imagePath, ".picasa") {
+		home, _ := os.UserHomeDir()
+		fp := fmt.Sprintf("%s/.picasa/images", home)
+		imagePath = fp
+	}
+
 	c := api.ImageConfig{
 		Category:           ccat,
 		TotalDownloadImage: ct,
-		Path:               dp.(string),
+		Path:               imagePath,
 		Apikey:             apikey.(string),
 	}
 
+	_, err := deleteFilesWithPrefix(imagePath, "picasa_")
+
+	if err != nil {
+		log.Fatal("Error deleting images ", err.Error())
+	}
 	internal.FetchImages(c)
 }
 
@@ -211,6 +223,26 @@ func (a *App) OpenDirDialogWindow() string {
 
 func (a *App) MessageDialog(m string) (string, error) {
 	return MessageBox(a.ctx, m)
+}
+
+func deleteFilesWithPrefix(dir, prf string) error {
+	// var deletedFiles []string
+
+	imgs, err := internal.GetAllFilesInDir(dir)
+	if err != nil {
+		return err
+	}
+
+	for _, v := range imgs {
+		if strings.Contains(v, prf) {
+			// deletedFiles = append(deletedFiles, v)
+			if err := os.Remove(v); err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
 }
 
 // https://gist.github.com/stupidbodo/0db61fa874213a31dc57 - replacement for cronjob
