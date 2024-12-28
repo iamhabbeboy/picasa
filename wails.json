@@ -9,5 +9,12 @@
   "author": {
     "name": "iamhabbeboy",
     "email": "iamhabbeboy@gmail.com"
+  },
+  "Info": {
+    "companyName": "Abiodun Azeez",
+    "productName": "Picasa Desktop",
+    "productVersion": "1.0.0",
+    "copyright": "Copyright",
+    "comments": "github.com/iamhabbeboy"
   }
 }
