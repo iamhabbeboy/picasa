@@ -11,9 +11,11 @@ build-scheduler:
 	sudo chmod +x $(TARGET_PATH)
 
 build-wails:
+	build-scheduler
 	wails build
 
-release-app: build-scheduler build-wails
+release-app:
+	wails build -nsis
 
 # Build both the worker and the desktop app
 build: build-scheduler build-wails
