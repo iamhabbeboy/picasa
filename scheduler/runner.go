@@ -30,28 +30,6 @@ func main() {
 
 	cimgs := imgs.(string)
 
-	// var ccat string
-	// var ctotimg int
-	//
-	// if cat == nil {
-	// 	ccat = "technology"
-	// } else {
-	// 	ccat = cat.(string)
-	// }
-	//
-	// if totimg == nil {
-	// 	ctotimg = 10
-	// } else {
-	// 	ctotimg = totimg.(int)
-	// }
-
-	// c := api.ImageConfig{
-	// 	Category:           ccat,
-	// 	TotalDownloadImage: ctotimg,
-	// 	Path:               dp.(string),
-	// 	Apikey:             apikey.(string),
-	// }
-
 	tmx := getDuration(cint.(string))
 
 	deskw := time.NewTicker(tmx)
@@ -66,8 +44,8 @@ func main() {
 		select {
 		case <-deskw.C:
 			scheduleSetDesktopWallpaper(cimgs)
-			// case <-down.C:
-			// 	scheduleDownloadImages(c, cimgs)
+		case <-down.C:
+			scheduleDownloadImages(c, cimgs)
 		}
 	}
 
@@ -99,7 +77,6 @@ func scheduleSetDesktopWallpaper(cnf string) error {
 
 	random := rand.Intn(len(imgs))
 	f := imgs[random]
-	fmt.Println(f)
 	internal.WallpaperEvent(f)
 
 	return nil

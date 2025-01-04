@@ -142,7 +142,7 @@ func (a *App) DownloadImages() {
 		Apikey:             apikey.(string),
 	}
 
-	_, err := deleteFilesWithPrefix(imagePath, "picasa_")
+	err := deleteFilesWithPrefix(imagePath, "picasa_")
 
 	if err != nil {
 		log.Fatal("Error deleting images ", err.Error())
@@ -226,8 +226,6 @@ func (a *App) MessageDialog(m string) (string, error) {
 }
 
 func deleteFilesWithPrefix(dir, prf string) error {
-	// var deletedFiles []string
-
 	imgs, err := internal.GetAllFilesInDir(dir)
 	if err != nil {
 		return err
