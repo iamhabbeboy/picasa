@@ -20,37 +20,35 @@ func main() {
 	imgs, _ := conf.Get("image.selected_abs_path")
 
 	apikey, _ := conf.Get("api.unsplash_apikey")
-	dp, _ := conf.Get("image.selected_abs_path")
-	// cat, _ := conf.Get("api.image_category")
-	// totimg, _ := conf.Get("api.download_limit")
+	cat, _ := conf.Get("api.image_category")
+	totimg, _ := conf.Get("api.download_limit")
 
-	if apikey == nil || dp == nil {
+	if apikey == nil || imgs == nil {
 		log.Fatal("Image path not set")
 	}
 
+	var ccat, k string
+	var timg int
+
+	if cat == nil {
+		ccat = "technology"
+	} else {
+		ccat = cat.(string)
+	}
+
+	if apikey == nil {
+		log.Fatal("API key not found")
+	} else {
+		k = apikey.(string)
+	}
+
+	if totimg == nil {
+		timg = 10
+	} else {
+		timg = totimg.(int)
+	}
+
 	cimgs := imgs.(string)
-
-	// var ccat string
-	// var ctotimg int
-	//
-	// if cat == nil {
-	// 	ccat = "technology"
-	// } else {
-	// 	ccat = cat.(string)
-	// }
-	//
-	// if totimg == nil {
-	// 	ctotimg = 10
-	// } else {
-	// 	ctotimg = totimg.(int)
-	// }
-
-	// c := api.ImageConfig{
-	// 	Category:           ccat,
-	// 	TotalDownloadImage: ctotimg,
-	// 	Path:               dp.(string),
-	// 	Apikey:             apikey.(string),
-	// }
 
 	tmx := getDuration(cint.(string))
 
@@ -60,14 +58,21 @@ func main() {
 	defer deskw.Stop()
 	defer down.Stop()
 
+	c := api.ImageConfig{
+		Category:           ccat,
+		TotalDownloadImage: timg,
+		Apikey:             k,
+		Path:               cimgs,
+	}
+
 	// quit := make(chan struct{})
 
 	for {
 		select {
 		case <-deskw.C:
 			scheduleSetDesktopWallpaper(cimgs)
-			// case <-down.C:
-			// 	scheduleDownloadImages(c, cimgs)
+		case <-down.C:
+			scheduleDownloadImages(c)
 		}
 	}
 
@@ -76,14 +81,10 @@ func main() {
 	// Simulate running for some time (e.g., 1 hour)
 }
 
-func scheduleDownloadImages(c api.ImageConfig, imgs string) error {
-	if imgs == "" {
-		log.Fatal("Image directory not set")
-	}
+func scheduleDownloadImages(c api.ImageConfig) error {
 
 	fmt.Println(c)
-
-	internal.FetchImages(c)
+	// internal.FetchImages(c)
 
 	println("Hello, world my people")
 	return nil
@@ -99,7 +100,6 @@ func scheduleSetDesktopWallpaper(cnf string) error {
 
 	random := rand.Intn(len(imgs))
 	f := imgs[random]
-	fmt.Println(f)
 	internal.WallpaperEvent(f)
 
 	return nil
